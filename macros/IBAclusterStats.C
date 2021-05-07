@@ -62,6 +62,7 @@ void IBAclusterStats(int preciousSensorID = 492)
        auto label = mcLabels->getLabels(iCluster);
        auto nLabels = label.size();
        std::cout << "Cluster # " << iCluster << " has " << nLabels << " labels" << std::endl; // TODO: add to histogram
+       auto nPilleUp = 0;
         for ( uint32_t i_lbl = 0 ; i_lbl < nLabels ; i_lbl++) {
           if (DEBUG_VERBOSE) {
             std::cout << "   EventID = " << label[i_lbl].getEventID() <<
@@ -70,6 +71,7 @@ void IBAclusterStats(int preciousSensorID = 492)
      			   " ; isFake = " << label[i_lbl].isFake() << std::endl;
           }
           if (label[i_lbl].isValid()) {
+            nPilleUp++; // Increment pile up counter for this cluster. If > 1, more than one track contributed to this cluster.
             auto eventID = label[i_lbl].getEventID();
             auto trackID = label[i_lbl].getTrackID();
             auto sourceID = label[i_lbl].getSourceID();
@@ -81,13 +83,15 @@ void IBAclusterStats(int preciousSensorID = 492)
             if (DEBUG_VERBOSE) {
               std::cout << "    This is a valid label.\n";
               std::cout << "    Add to histograms: trackID " << trackID << " SourceID = " << sourceID << std::endl; // To check the efects of secondaries
-              std::cout << "      This track has  " << mcTrack->getProdProcessAsString() << std::endl;
-              std::cout << "      This track has  " << mcTrack->GetEnergy() << " Gev" << std::endl;
+              std::cout << "      This track comes from a " << mcTrack->getProdProcessAsString() << std::endl;
+              std::cout << "      This track has " << mcTrack->GetEnergy() << " Gev" << std::endl;
               clusterFromTracks++;
             }
 
           } // isValid
         } // Loop labels
+        if (nPilleUp > 1 ) std::cout << "  ================> Pilled up cluster with " << nPilleUp << " tracks" << std::endl;
+        // Perhaps nPilleUP should fill a histogram, rather than nLabels. nLabels counts noise.
      } // preciousSensorID
      iCluster++;
  } // Loop on Clusters
