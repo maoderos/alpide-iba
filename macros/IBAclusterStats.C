@@ -83,9 +83,7 @@ void IBAclusterStats(int preciousSensorID = 492)
    std::cout << "MC Histo event " << nEvent << " with nTracks = " << nTracks << std::endl;
    for (int iTrack = 0 ; iTrack < nTracks ; iTrack++ ) {
      MCTrackT<float>* mcTrack =  &(*mcTr).at(iTrack);
-     if(1) { // FIXME
-       // TODO: filter to ensure histogram is filled only with primaries hitting preciousSensor
-       // This is essential to have the correct Efficiency histogram
+     if(mcTrack->isPrimary()) {
        h_energyMC->Fill(mcTrack->GetEnergy());
      }
    }
