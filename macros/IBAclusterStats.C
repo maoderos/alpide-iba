@@ -3,6 +3,8 @@
 #include "TROOT.h"
 #include "TFile.h"
 #include "TTree.h"
+#include "TCanvas.h"
+#include "TEfficiency.h"
 #include <TMath.h>
 #include <TH1F.h>
 #include <TH1.h>
@@ -66,10 +68,29 @@ void IBAclusterStats(int preciousSensorID = 492)
 
  // Loop over MFT Clusters
 
-// Histogram 
+// Histogram
  TH1* h_nlabel = new TH1F("nLabel","nLabel",100,0,10);
- TH1* h_pulledUp = new TH1F("pulledUp","pulledUp",100,0,10);
+ TH1* h_pileUp = new TH1F("PileUp","PileUp",100,0,10);
  TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
+ TH1* h_energyObserved = new TH1F("energyObserved","energyObserved",100,0,10);
+ TH1* h_energyMC = new TH1F("energyMC","energyMC",100,0,10);
+ TEfficiency* hEff = nullptr;
+
+ // Fill MC tracks Histos
+ for  (int nEvent = 0 ; nEvent < nEvents ; nEvent++) {
+   o2SimKineTree -> GetEntry(nEvent);
+   int nTracks = mcTr->size(); // Should be 1 for single pixel efficiency
+   std::cout << "MC Histo event " << nEvent << " with nTracks = " << nTracks << std::endl;
+   for (int iTrack = 0 ; iTrack < nTracks ; iTrack++ ) {
+     MCTrackT<float>* mcTrack =  &(*mcTr).at(iTrack);
+     if(1) { // FIXME
+       // TODO: filter to ensure histogram is filled only with primaries hitting preciousSensor
+       // This is essential to have the correct Efficiency histogram
+       h_energyMC->Fill(mcTrack->GetEnergy());
+     }
+   }
+ }
+
 
  std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
   auto  iCluster = 0;
@@ -98,21 +119,23 @@ void IBAclusterStats(int preciousSensorID = 492)
             // Since we know the trackID and the event this comes from, we get her information from the kinematics file (o2sim_Kine.root)
             o2SimKineTree -> GetEntry(eventID);
             MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
-
+            h_energyObserved->Fill(mcTrack->GetEnergy());
+            h_sourceid->Fill(sourceID);
+            clusterFromTracks++;
             if (DEBUG_VERBOSE) {
               std::cout << "    This is a valid label.\n";
               std::cout << "    Add to histograms: trackID " << trackID << " SourceID = " << sourceID << std::endl; // To check the efects of secondaries
               std::cout << "      This track comes from a " << mcTrack->getProdProcessAsString() << std::endl;
               std::cout << "      This track has " << mcTrack->GetEnergy() << " Gev" << std::endl;
-              h_sourceid->Fill(sourceID);
-              clusterFromTracks++;
             }
 
           } // isValid
         } // Loop labels
-        h_pulledUp->Fill(nPilleUp);
-        if (nPilleUp > 1 ) std::cout << "  ================> Pilled up cluster with " << nPilleUp << " tracks" << std::endl;
-        // Perhaps nPilleUP should fill a histogram, rather than nLabels. nLabels counts noise.
+        if (nPilleUp > 1 ) {
+          std::cout << "  ================> Pilled up cluster with " << nPilleUp << " tracks" << std::endl;
+          h_pileUp->Fill(nPilleUp); // Fill pullup
+          // Perhaps nPilleUP should fill a histogram, rather than nLabels. nLabels counts noise.
+      }
      } // preciousSensorID
      iCluster++;
  } // Loop on Clusters
@@ -124,15 +147,29 @@ void IBAclusterStats(int preciousSensorID = 492)
  std::cout << "Total Clusters from tracks: " << clusterFromTracks << std::endl;
  std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl << std::endl;
 
+hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 
-TCanvas *c1=new TCanvas();
+TCanvas *c1 = new TCanvas();
 c1->Divide(2,2); // divides
 
 c1->cd(1);
-h_nlabel->Draw();
+h_energyMC->Draw();
 c1->cd(2);
-h_pulledUp->Draw();
+h_energyObserved->Draw();
 c1->cd(3);
-h_sourceid->Draw();
-c1->SaveAs("output.pdf");
+h_pileUp->Draw();
+c1->cd(4);
+hEff->Draw();
+c1->SaveAs("ALPIDESinglePixel_Eff.pdf");
+
+TFile* pFile = new TFile("ALPIDESinglePixel.root","recreate");
+
+h_energyObserved->Write();
+h_energyMC->Write();
+hEff->Write();
+h_pileUp->Write();
+h_sourceid->Write();
+h_nlabel->Write();
+c1->Write();
+pFile->Close();
 }
