@@ -118,7 +118,6 @@ void IBAclusterStats(int preciousSensorID = 492)
             o2SimKineTree -> GetEntry(eventID);
             MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
             h_energyObserved->Fill(mcTrack->GetEnergy());
-            h_sourceid->Fill(sourceID);
             clusterFromTracks++;
             if (DEBUG_VERBOSE) {
               std::cout << "    This is a valid label.\n";
