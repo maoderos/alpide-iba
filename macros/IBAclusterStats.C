@@ -5,6 +5,7 @@
 #include "TTree.h"
 #include "TCanvas.h"
 #include "TEfficiency.h"
+#include "TParameter.h"
 #include <TMath.h>
 #include <TH1F.h>
 #include <TH1.h>
@@ -77,6 +78,7 @@ void IBAclusterStats(int preciousSensorID = 492)
  TEfficiency* hEff = nullptr;
 
  // Fill MC tracks Histos
+ int nPrimaries = 0;
  for  (int nEvent = 0 ; nEvent < nEvents ; nEvent++) {
    o2SimKineTree -> GetEntry(nEvent);
    int nTracks = mcTr->size(); // Should be 1 for single pixel efficiency
@@ -85,6 +87,7 @@ void IBAclusterStats(int preciousSensorID = 492)
      MCTrackT<float>* mcTrack =  &(*mcTr).at(iTrack);
      if(mcTrack->isPrimary()) {
        h_energyMC->Fill(mcTrack->GetEnergy());
+       nPrimaries++;
      }
    }
  }
@@ -92,7 +95,7 @@ void IBAclusterStats(int preciousSensorID = 492)
 
  std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
   auto  iCluster = 0;
-  auto clusterFromTracks = 0;
+  int clusterFromTracks = 0;
    for (auto &cluster : clusterMFTVec) {
      if(cluster.getSensorID() == preciousSensorID) {
        auto label = mcLabels->getLabels(iCluster);
@@ -141,8 +144,11 @@ void IBAclusterStats(int preciousSensorID = 492)
  std::cout << std::endl << std::endl;;
  std::cout << "SUMMARY for preciousSensorID = " << preciousSensorID <<  ":"  << std::endl;
  std::cout << nEvents << " events"  << std::endl;
+ std::cout << "Total Primaries: " << nPrimaries << std::endl;
  std::cout << "Total Clusters from tracks: " << clusterFromTracks << std::endl;
- std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl << std::endl;
+ std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
+ std::cout << 1.0 * nPrimaries / nEvents << " nPrimaries per event" << std::endl;
+ std::cout << 1.0 * clusterFromTracks / nPrimaries << " clusterfromTracks per primary" << std::endl << std::endl;
 
 hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 
@@ -168,5 +174,11 @@ h_pileUp->Write();
 h_sourceid->Write();
 h_nlabel->Write();
 c1->Write();
+
+// Store some parameters
+TParameter nClustersFromTracks("nClustersFromTracks", clusterFromTracks);
+TParameter nPrimaries_("nPrimaries", nPrimaries);
+pFile->WriteObject(&nPrimaries_,"nPrimaries");
+pFile->WriteObject(&nClustersFromTracks,"nClustersFromTracks");
 pFile->Close();
 }
