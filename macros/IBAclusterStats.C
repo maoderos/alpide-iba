@@ -26,6 +26,7 @@ bool DEBUG_VERBOSE = true;
 // $ root.exe -q IBAclusterStats.C+
 //
 //_________________________________________________________________________________________________
+
 void IBAclusterStats(int preciousSensorID = 492)
 {
   const Char_t *clsFile = "mftclusters.root";
@@ -115,7 +116,6 @@ void IBAclusterStats(int preciousSensorID = 492)
             nPilleUp++; // Increment pile up counter for this cluster. If > 1, more than one track contributed to this cluster.
             auto eventID = label[i_lbl].getEventID();
             auto trackID = label[i_lbl].getTrackID();
-            auto sourceID = label[i_lbl].getSourceID();
             // Since we know the trackID and the event this comes from, we get her information from the kinematics file (o2sim_Kine.root)
             o2SimKineTree -> GetEntry(eventID);
             MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
