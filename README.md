@@ -12,7 +12,7 @@
 Obs: These instruction will work only inside O2 environment and the folders "macros" and "scripts" must be in the same directory.
 
 For generating events using the `Generate_single_proton_events.sh`:
-* `source scripts/Generate_single_proton_events.sh -n 10 number_events -i "10 20 30"`
+* `source scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
 
 The command above generate 3 simulations with interaction rates of 10hz,20hz and 30hz with 10 events. 3 folders will be created, each of them with the name of the interaction rate.
 
