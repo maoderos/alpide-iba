@@ -19,4 +19,4 @@ The command above generate 3 simulations with interaction rates of 10hz,20hz and
 For analysing the data using `analyze_single_pronton_events.sh`:
 * `scripts/analyze_single_pronton_events.sh -i "10 20 30"`
 
-The command above execute the `IBAclusterStats.C` inside folder 10,20 and 30, generating hitograms and a root file called "ALPIDESinglePixel.root".
+The command above execute the `IBAclusterStats.C` inside folder 10,20 and 30, generating histograms and a root file called "ALPIDESinglePixel.root".
