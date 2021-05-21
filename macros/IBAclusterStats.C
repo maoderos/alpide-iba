@@ -27,7 +27,6 @@ bool DEBUG_VERBOSE = true;
 //_________________________________________________________________________________________________
 void IBAclusterStats(int preciousSensorID = 492)
 {
-
   const Char_t *clsFile = "mftclusters.root";
   const Char_t *o2sim_KineFile = "o2sim_Kine.root";
 
@@ -169,4 +168,5 @@ h_sourceid->Write();
 h_nlabel->Write();
 c1->Write();
 pFile->Close();
+
 }
