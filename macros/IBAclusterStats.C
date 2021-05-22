@@ -95,7 +95,7 @@ void IBAclusterStats(int preciousSensorID = 492)
 
  std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
   auto  iCluster = 0;
-  int clusterFromTracks = 0;
+  int clusterFromPrimaries = 0;
    for (auto &cluster : clusterMFTVec) {
      if(cluster.getSensorID() == preciousSensorID) {
        auto label = mcLabels->getLabels(iCluster);
@@ -116,11 +116,14 @@ void IBAclusterStats(int preciousSensorID = 492)
             nPilleUp++; // Increment pile up counter for this cluster. If > 1, more than one track contributed to this cluster.
             auto eventID = label[i_lbl].getEventID();
             auto trackID = label[i_lbl].getTrackID();
+            auto sourceID = label[i_lbl].getSourceID();
             // Since we know the trackID and the event this comes from, we get her information from the kinematics file (o2sim_Kine.root)
             o2SimKineTree -> GetEntry(eventID);
             MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
-            h_energyObserved->Fill(mcTrack->GetEnergy());
-            clusterFromTracks++;
+            if (mcTrack->isPrimary()) {
+              h_energyObserved->Fill(mcTrack->GetEnergy());
+              clusterFromPrimaries++;
+            }
             if (DEBUG_VERBOSE) {
               std::cout << "    This is a valid label.\n";
               std::cout << "    Add to histograms: trackID " << trackID << " SourceID = " << sourceID << std::endl; // To check the efects of secondaries
@@ -144,10 +147,10 @@ void IBAclusterStats(int preciousSensorID = 492)
  std::cout << "SUMMARY for preciousSensorID = " << preciousSensorID <<  ":"  << std::endl;
  std::cout << nEvents << " events"  << std::endl;
  std::cout << "Total Primaries: " << nPrimaries << std::endl;
- std::cout << "Total Clusters from tracks: " << clusterFromTracks << std::endl;
- std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
+ std::cout << "Total Clusters from primaries: " << clusterFromPrimaries << std::endl;
+ //std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
  std::cout << 1.0 * nPrimaries / nEvents << " nPrimaries per event" << std::endl;
- std::cout << 1.0 * clusterFromTracks / nPrimaries << " clusterfromTracks per primary" << std::endl << std::endl;
+ std::cout << 1.0 * clusterFromPrimaries / nPrimaries << " clusterfromTracks per primary" << std::endl << std::endl;
 
 hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 
@@ -175,10 +178,10 @@ h_nlabel->Write();
 c1->Write();
 
 // Store some parameters
-TParameter nClustersFromTracks("nClustersFromTracks", clusterFromTracks);
+TParameter nClustersFromPrimaries("nClustersFromPrimaries", clusterFromPrimaries);
 TParameter nPrimaries_("nPrimaries", nPrimaries);
 pFile->WriteObject(&nPrimaries_,"nPrimaries");
-pFile->WriteObject(&nClustersFromTracks,"nClustersFromTracks");
+pFile->WriteObject(&nClustersFromPrimaries,"nClustersFromPrimaries");
 pFile->Close();
 
 }

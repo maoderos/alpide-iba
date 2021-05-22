@@ -14,7 +14,6 @@ echo "Interaction Rates: $ir";
 
 for j in $ir
 do
-  echo $j;
   mkdir $j;
   cd $j;
   o2-sim -m MFT -e TGeant3 -g boxgen -n $events --configKeyValues 'BoxGun.pdg=2212 ; BoxGun.eta[0]=-20 ; BoxGun.eta[1]=-20.0; BoxGun.number=1; Diamond.position[0]=0.25;Diamond.position[1]=4.004;Diamond.position[2]=-45.000;Diamond.width[2]=0; MFTBase.buildHeatExchanger=false; MFTBase.buildFlex=false';
