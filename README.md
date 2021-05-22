@@ -20,3 +20,6 @@ For analysing data using `analyze_single_pronton_events.sh`:
 * `./scripts/analyze_single_pronton_events.sh -i "10 20 30"`
 
 The command above execute the `IBAclusterStats.C` inside folder 10,20 and 30, generating histograms and a root file called "ALPIDESinglePixel.root".
+
+For Generating the plot of efficiency (nClusterFromPrimareis/nPrimaries), just enter the following command:
+* `root.exe -b -q /macros/IBAInteractionRate.C`
