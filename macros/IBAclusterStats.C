@@ -50,7 +50,7 @@ void IBAclusterStats(int preciousSensorID = 492)
  mftClusterTree -> SetBranchAddress("MFTClusterMCTruth",&mcLabels);
 
  //Info from RO
- std::vector<o2::itsmft::ROFRecord>* rofRecVec = nullptr;
+ std::vector<o2::itsmft::ROFRecord> rofRecVec,*rofRecVecP = &rofRecVec;
  mftClusterTree -> SetBranchAddress("MFTClustersROF", &rofRecVec);
 
 //Missing infos from MC2ROF!
@@ -92,8 +92,9 @@ void IBAclusterStats(int preciousSensorID = 492)
    }
  }
 
+  std::map<std::tuple<int,int>,int> clusterPrimaryTrackCount; // Define container
 
- std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
+  std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
   auto  iCluster = 0;
   int clusterFromPrimaries = 0;
    for (auto &cluster : clusterMFTVec) {
@@ -121,6 +122,11 @@ void IBAclusterStats(int preciousSensorID = 492)
             o2SimKineTree -> GetEntry(eventID);
             MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
             if (mcTrack->isPrimary()) {
+
+              clusterPrimaryTrackCount[{eventID,trackID}]=clusterPrimaryTrackCount[{eventID,trackID}]+1;  // Increment number of clusters observed for a track (will create the element if non-existent)
+
+              std::cout << clusterPrimaryTrackCount[{eventID,trackID}] << std::endl;
+
               h_energyObserved->Fill(mcTrack->GetEnergy());
               clusterFromPrimaries++;
             }
@@ -129,6 +135,7 @@ void IBAclusterStats(int preciousSensorID = 492)
               std::cout << "    Add to histograms: trackID " << trackID << " SourceID = " << sourceID << std::endl; // To check the efects of secondaries
               std::cout << "      This track comes from a " << mcTrack->getProdProcessAsString() << std::endl;
               std::cout << "      This track has " << mcTrack->GetEnergy() << " Gev" << std::endl;
+
             }
 
           } // isValid
@@ -142,46 +149,56 @@ void IBAclusterStats(int preciousSensorID = 492)
      iCluster++;
  } // Loop on Clusters
 
+ //loop through map values to identify tracks with 2 or more clusters.
+ std::map<std::tuple<int,int>,int>::iterator it = clusterPrimaryTrackCount.begin();
+ int SameTrackClusters = 0;
+ while(it != clusterPrimaryTrackCount.end()){
+   if(it->second >= 2){
+      SameTrackClusters++;
+   }
+   it++;
+  }
 
- std::cout << std::endl << std::endl;;
+
  std::cout << "SUMMARY for preciousSensorID = " << preciousSensorID <<  ":"  << std::endl;
  std::cout << nEvents << " events"  << std::endl;
  std::cout << "Total Primaries: " << nPrimaries << std::endl;
  std::cout << "Total Clusters from primaries: " << clusterFromPrimaries << std::endl;
  //std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
  std::cout << 1.0 * nPrimaries / nEvents << " nPrimaries per event" << std::endl;
- std::cout << 1.0 * clusterFromPrimaries / nPrimaries << " clusterfromTracks per primary" << std::endl << std::endl;
+ std::cout << 1.0 * clusterFromPrimaries / nPrimaries << " clusterfromTracks per primary" << std::endl;
+ std::cout << ">=2 Clusters on same tracks: " << SameTrackClusters << std::endl;
 
-hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
+ hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 
-TCanvas *c1 = new TCanvas();
-c1->Divide(2,2); // divides
+ TCanvas *c1 = new TCanvas();
+ c1->Divide(2,2); // divides
 
-c1->cd(1);
-h_energyMC->Draw();
-c1->cd(2);
-h_energyObserved->Draw();
-c1->cd(3);
-h_pileUp->Draw();
-c1->cd(4);
-hEff->Draw();
-c1->SaveAs("ALPIDESinglePixel_Eff.pdf");
+ c1->cd(1);
+ h_energyMC->Draw();
+ c1->cd(2);
+ h_energyObserved->Draw();
+ c1->cd(3);
+ h_pileUp->Draw();
+ c1->cd(4);
+ hEff->Draw();
+ c1->SaveAs("ALPIDESinglePixel_Eff.pdf");
 
-TFile* pFile = new TFile("ALPIDESinglePixel.root","recreate");
+ TFile* pFile = new TFile("ALPIDESinglePixel.root","recreate");
 
-h_energyObserved->Write();
-h_energyMC->Write();
-hEff->Write();
-h_pileUp->Write();
-h_sourceid->Write();
-h_nlabel->Write();
-c1->Write();
+ h_energyObserved->Write();
+ h_energyMC->Write();
+ hEff->Write();
+ h_pileUp->Write();
+ h_sourceid->Write();
+ h_nlabel->Write();
+ c1->Write();
 
-// Store some parameters
-TParameter nClustersFromPrimaries("nClustersFromPrimaries", clusterFromPrimaries);
-TParameter nPrimaries_("nPrimaries", nPrimaries);
-pFile->WriteObject(&nPrimaries_,"nPrimaries");
-pFile->WriteObject(&nClustersFromPrimaries,"nClustersFromPrimaries");
-pFile->Close();
+ // Store some parameters
+ TParameter nClustersFromPrimaries("nClustersFromPrimaries", clusterFromPrimaries);
+ TParameter nPrimaries_("nPrimaries", nPrimaries);
+ pFile->WriteObject(&nPrimaries_,"nPrimaries");
+ pFile->WriteObject(&nClustersFromPrimaries,"nClustersFromPrimaries");
+ pFile->Close();
 
 }
