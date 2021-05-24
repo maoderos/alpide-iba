@@ -51,7 +51,7 @@ void IBAclusterStats(int preciousSensorID = 492)
 
  //Info from RO
  std::vector<o2::itsmft::ROFRecord> rofRecVec,*rofRecVecP = &rofRecVec;
- mftClusterTree -> SetBranchAddress("MFTClustersROF", &rofRecVec);
+ mftClusterTree -> SetBranchAddress("MFTClustersROF", &rofRecVecP);
 
 //Missing infos from MC2ROF!
 
@@ -93,11 +93,14 @@ void IBAclusterStats(int preciousSensorID = 492)
  }
 
   std::map<std::tuple<int,int>,int> clusterPrimaryTrackCount; // Define container
-
+  std::map<std::tuple<int,int>,std::vector<int> > clusterPrimaryTrackROFs;
   std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
-  auto  iCluster = 0;
+  auto iROF = 0;
   int clusterFromPrimaries = 0;
-   for (auto &cluster : clusterMFTVec) {
+  //loof
+  for(auto &ROF:rofRecVec){
+   for (auto iCluster = ROF.getFirstEntry(); iCluster < (ROF.getFirstEntry() + ROF.getNEntries()); iCluster++) {
+     auto &cluster = clusterMFTVec[iCluster];
      if(cluster.getSensorID() == preciousSensorID) {
        auto label = mcLabels->getLabels(iCluster);
        auto nLabels = label.size();
@@ -124,11 +127,15 @@ void IBAclusterStats(int preciousSensorID = 492)
             if (mcTrack->isPrimary()) {
 
               clusterPrimaryTrackCount[{eventID,trackID}]=clusterPrimaryTrackCount[{eventID,trackID}]+1;  // Increment number of clusters observed for a track (will create the element if non-existent)
+              clusterPrimaryTrackROFs[{eventID,trackID}].push_back(iROF);
 
               std::cout << clusterPrimaryTrackCount[{eventID,trackID}] << std::endl;
 
-              h_energyObserved->Fill(mcTrack->GetEnergy());
-              clusterFromPrimaries++;
+             if (clusterPrimaryTrackROFs[{eventID,trackID}].size() < 2) {
+               h_energyObserved->Fill(mcTrack->GetEnergy());
+               clusterFromPrimaries++;
+
+             }
             }
             if (DEBUG_VERBOSE) {
               std::cout << "    This is a valid label.\n";
@@ -146,15 +153,19 @@ void IBAclusterStats(int preciousSensorID = 492)
           // Perhaps nPilleUP should fill a histogram, rather than nLabels. nLabels counts noise.
       }
      } // preciousSensorID
-     iCluster++;
+
  } // Loop on Clusters
+ iROF++;
+ }
 
  //loop through map values to identify tracks with 2 or more clusters.
  std::map<std::tuple<int,int>,int>::iterator it = clusterPrimaryTrackCount.begin();
- int SameTrackClusters = 0;
+ int TrackWithMultipleClusters = 0;
  while(it != clusterPrimaryTrackCount.end()){
-   if(it->second >= 2){
-      SameTrackClusters++;
+   if(it->second > 1){
+      TrackWithMultipleClusters++;
+      std::cout << "size of nROF for track " << clusterPrimaryTrackROFs[it->first].size() << std::endl;
+
    }
    it++;
   }
@@ -167,7 +178,7 @@ void IBAclusterStats(int preciousSensorID = 492)
  //std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
  std::cout << 1.0 * nPrimaries / nEvents << " nPrimaries per event" << std::endl;
  std::cout << 1.0 * clusterFromPrimaries / nPrimaries << " clusterfromTracks per primary" << std::endl;
- std::cout << ">=2 Clusters on same tracks: " << SameTrackClusters << std::endl;
+ std::cout << ">=2 Clusters on same tracks: " << TrackWithMultipleClusters << std::endl;
 
  hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 

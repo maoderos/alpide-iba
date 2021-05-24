@@ -5,12 +5,12 @@ while getopts "i:" opt; do
   esac
 done
 # Add analysis for IBAInteractionRates!
+ir_file=ir_list.txt;
+if test -f "$ir_file"; then
+  rm -rf $ir_file;
+fi
 
 for i in $ir
 do
-  cp  macros/IBAclusterStats.C $i;
-  cd $i;
-  root.exe -b -q IBAclusterStats.C;
-  rm IBAclusterStats.C;
-  cd ..;
+  echo "${i}" >> $ir_file;
 done

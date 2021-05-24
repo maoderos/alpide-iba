@@ -6,6 +6,7 @@
   * `$ root.exe -q IBAInteractionRate.C+`
 * `scripts/Generate_single_proton_events.sh`: Generate proton events for each interaction rate provided.
 * `scripts/analyze_single_pronton_events.sh`: Apply root macro for simulations.
+* `scripts/generate_ir_list.sh`: Generate .txt list with interaction rates.
 
 ## Simulation Instructions
 
@@ -21,5 +22,13 @@ For analysing data using `analyze_single_pronton_events.sh`:
 
 The command above execute the `IBAclusterStats.C` inside folder 10,20 and 30, generating histograms and a root file called "ALPIDESinglePixel.root".
 
-For Generating the plot of efficiency (nClusterFromPrimareis/nPrimaries), just enter the following command:
+For Generating the plot of efficiency (nClusterFromPrimareis/nPrimaries), you need to specify witch interaction rates do you wanto to use to make de plot:
+
+* `./scripts/generate_ir_list.sh -i "10 20 30"`
+
+The command above creates a list in .txt which contains the interaction rates provided, then:
+
 * `root.exe -b -q /macros/IBAInteractionRate.C`
+
+
+Will generate de plot.
