@@ -164,8 +164,15 @@ void IBAclusterStats(int preciousSensorID = 492)
  while(it != clusterPrimaryTrackCount.end()){
    if(it->second > 1){
       TrackWithMultipleClusters++;
-      std::cout << "size of nROF for track " << clusterPrimaryTrackROFs[it->first].size() << std::endl;
+      std::cout << "size of nROF for trackID " << std::get<1>(it->first) << " EventID "<< std::get<0>(it->first) <<":" << clusterPrimaryTrackROFs[it->first].size() << std::endl;
+      if (DEBUG_VERBOSE) {
+        std::cout << "ROFs are: ";
+        for(auto i=0; i < clusterPrimaryTrackROFs[it->first].size();i++){
+          std::cout << clusterPrimaryTrackROFs[it->first][i] << ", ";
 
+        }
+        std::cout << " " << std::endl;
+      }
    }
    it++;
   }
