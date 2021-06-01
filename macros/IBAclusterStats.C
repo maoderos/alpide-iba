@@ -27,7 +27,7 @@ bool DEBUG_VERBOSE = true;
 //
 //_________________________________________________________________________________________________
 
-void IBAclusterStats(int preciousSensorID = 492)
+void IBAclusterStats(int preciousSensorID = 90)
 {
   const Char_t *clsFile = "mftclusters.root";
   const Char_t *o2sim_KineFile = "o2sim_Kine.root";
@@ -75,6 +75,7 @@ void IBAclusterStats(int preciousSensorID = 492)
  TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
  TH1* h_energyObserved = new TH1F("energyObserved","energyObserved",100,0,10);
  TH1* h_energyMC = new TH1F("energyMC","energyMC",100,0,10);
+ TH1* h_nROF_size = new TH1F("size_nROF", "size_nROF",100,0,10);
  TEfficiency* hEff = nullptr;
 
  // Fill MC tracks Histos
@@ -92,8 +93,9 @@ void IBAclusterStats(int preciousSensorID = 492)
    }
  }
 
-  std::map<std::tuple<int,int>,int> clusterPrimaryTrackCount; // Define container
-  std::map<std::tuple<int,int>,std::vector<int> > clusterPrimaryTrackROFs;
+  std::map<std::tuple<int,int>,int > clusterPrimaryTrackCount; // Define container
+  std::map<std::tuple<int,int>,std::vector<int>> clusterPrimaryTrackROFs;
+  std::map<std::tuple<int,int>,std::vector<std::tuple<int,int>> >  PixelPositionOfPrimaryClusterROFs;
   std::cout << "Loop over clusters! Filtering preciousSensorID #" << preciousSensorID << std::endl;
   auto iROF = 0;
   int clusterFromPrimaries = 0;
@@ -128,6 +130,7 @@ void IBAclusterStats(int preciousSensorID = 492)
 
               clusterPrimaryTrackCount[{eventID,trackID}]=clusterPrimaryTrackCount[{eventID,trackID}]+1;  // Increment number of clusters observed for a track (will create the element if non-existent)
               clusterPrimaryTrackROFs[{eventID,trackID}].push_back(iROF);
+              PixelPositionOfPrimaryClusterROFs[{eventID,trackID}].push_back(make_tuple(cluster.getRow(), cluster.getCol()));
 
               std::cout << clusterPrimaryTrackCount[{eventID,trackID}] << std::endl;
 
@@ -165,11 +168,12 @@ void IBAclusterStats(int preciousSensorID = 492)
    if(it->second > 1){
       TrackWithMultipleClusters++;
       std::cout << "size of nROF for trackID " << std::get<1>(it->first) << " EventID "<< std::get<0>(it->first) <<":" << clusterPrimaryTrackROFs[it->first].size() << std::endl;
+      h_nROF_size->Fill(clusterPrimaryTrackROFs[it->first].size());
       if (DEBUG_VERBOSE) {
         std::cout << "ROFs are: ";
         for(auto i=0; i < clusterPrimaryTrackROFs[it->first].size();i++){
-          std::cout << clusterPrimaryTrackROFs[it->first][i] << ", ";
-
+          std::cout << clusterPrimaryTrackROFs[it->first][i] << "(" << get<0>(PixelPositionOfPrimaryClusterROFs[it->first][i]) <<
+                                                                "," << get<1>(PixelPositionOfPrimaryClusterROFs[it->first][i]) << ")," ;
         }
         std::cout << " " << std::endl;
       }
@@ -210,6 +214,7 @@ void IBAclusterStats(int preciousSensorID = 492)
  h_pileUp->Write();
  h_sourceid->Write();
  h_nlabel->Write();
+ h_nROF_size->Write();
  c1->Write();
 
  // Store some parameters

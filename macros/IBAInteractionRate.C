@@ -7,6 +7,7 @@
 #include <TMath.h>
 #include <TH1F.h>
 #include <TH1.h>
+#include <TLegend.h>
 #include <TGraph.h>
 #include <TString>
 #include "SimulationDataFormat/MCTrack.h"
@@ -42,7 +43,7 @@ std::vector<int> GetIRlist(std::string filename){
 }
 
 
-void IBAInteractionRate(int preciousSensorID = 492){
+void IBAInteractionRate(int preciousSensorID = 90){
 
   std::string IR_file = "ir_list.txt";
   std::vector<int>intRate =  GetIRlist(IR_file);
@@ -82,9 +83,20 @@ void IBAInteractionRate(int preciousSensorID = 492){
   TGraph *gr1 = new TGraph(d_intRate.size(),&d_intRate[0],&efficiency[0]);
   gr1->SetTitle("; IntRate; Efficiency");
 
+  int max_x =  d_intRate.size() - 1;
+  double max_value = d_intRate[max_x];
+  TF1 *efficiency_th = new TF1("Theoretical Efficiency","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/x/9.8805107e-06/2",0,max_value);
+
+  TLegend *legend = new TLegend(0.2,0.2,0.4,0.4);
+  legend->AddEntry(gr1,"Simulation data","p");
+  legend->AddEntry(efficiency_th,"Theoretical eff.","l");
+  legend->Draw();
+
   TCanvas *c1 = new TCanvas();
   c1->cd();
   gr1->Draw("A*");
+  efficiency_th->Draw("SAME");
+  legend->Draw();
   c1->SaveAs("Efficiency.pdf");
 
 }

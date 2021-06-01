@@ -7,6 +7,7 @@
 * `scripts/Generate_single_proton_events.sh`: Generate proton events for each interaction rate provided.
 * `scripts/analyze_single_pronton_events.sh`: Apply root macro for simulations.
 * `scripts/generate_ir_list.sh`: Generate .txt list with interaction rates.
+* `o2-files/`: Files from o2 simulation that were modified. 
 
 ## Simulation Instructions
 
