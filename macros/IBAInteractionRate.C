@@ -43,7 +43,7 @@ std::vector<int> GetIRlist(std::string filename){
 }
 
 
-void IBAInteractionRate(int preciousSensorID = 90){
+void IBAInteractionRate(int preciousSensorID = 24){
 
   std::string IR_file = "ir_list.txt";
   std::vector<int>intRate =  GetIRlist(IR_file);

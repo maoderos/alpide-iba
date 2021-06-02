@@ -27,7 +27,7 @@ bool DEBUG_VERBOSE = true;
 //
 //_________________________________________________________________________________________________
 
-void IBAclusterStats(int preciousSensorID = 90)
+void IBAclusterStats(int preciousSensorID = 24)
 {
   const Char_t *clsFile = "mftclusters.root";
   const Char_t *o2sim_KineFile = "o2sim_Kine.root";
