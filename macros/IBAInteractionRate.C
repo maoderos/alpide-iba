@@ -87,7 +87,7 @@ void IBAInteractionRate(int preciousSensorID = 24){
   double max_value = d_intRate[max_x];
   TF1 *efficiency_th = new TF1("Theoretical Efficiency","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/x/9.8805107e-06/2",0,max_value);
 
-  TLegend *legend = new TLegend(0.2,0.2,0.4,0.4);
+  TLegend *legend = new TLegend(0.8,0.8,0.8,0.8);
   legend->AddEntry(gr1,"Simulation data","p");
   legend->AddEntry(efficiency_th,"Theoretical eff.","l");
   legend->Draw();
