@@ -32,4 +32,4 @@ The command above creates a list in .txt that contains the interaction rates pro
 * `root.exe -b -q /macros/IBAInteractionRate.C`
 
 
-Will generate de plot.
+Will generate the efficiency by interaction rate plot.
