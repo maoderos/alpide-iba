@@ -42,7 +42,7 @@ double GetnSim(std::string filename){
 
 }
 
-void IBAclusterStats(int preciousSensorID = 24)
+void IBAclusterStats(int preciousSensorID = 21)
 {
 
   int nSim = GetnSim("nSim.txt");
