@@ -216,7 +216,7 @@ void IBAclusterStats(int preciousSensorID = 21)
   //std::cout << 1.0 * clusterFromTracks / nEvents << " clusterfromTracks per event" << std::endl;
   std::cout << 1.0 * nPrimaries / numberEvents << " nPrimaries per event" << std::endl;
   std::cout << 1.0 * clusterFromPrimaries / nPrimaries << " clusterfromTracks per primary" << std::endl;
-  std::cout << ">=2 Clusters on same tracks: " << TrackWithMultipleClusters << std::endl;
+  std::cout << "Clusters in more than 1 ROF: " << TrackWithMultipleClusters << std::endl;
 
   hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
 
