@@ -20,7 +20,7 @@
 
 using o2::MCTrackT;
 
-bool DEBUG_VERBOSE = true;
+bool DEBUG_VERBOSE = false;
 
 //
 // $ root.exe -q IBAclusterStats.C+
@@ -109,7 +109,9 @@ void IBAclusterStats(int preciousSensorID = 21)
     for  (int nEvent = 0 ; nEvent < nEvents ; nEvent++) {
       o2SimKineTree -> GetEntry(nEvent);
       int nTracks = mcTr->size(); // Should be 1 for single pixel efficiency
+      if (DEBUG_VERBOSE) {
       std::cout << "MC Histo event " << nEvent << " with nTracks = " << nTracks << std::endl;
+      }
       for (int iTrack = 0 ; iTrack < nTracks ; iTrack++ ) {
         MCTrackT<float>* mcTrack =  &(*mcTr).at(iTrack);
         if(mcTrack->isPrimary()) {
@@ -132,17 +134,19 @@ void IBAclusterStats(int preciousSensorID = 21)
         if(cluster.getSensorID() == preciousSensorID) {
           auto label = mcLabels->getLabels(iCluster);
           auto nLabels = label.size();
-          std::cout << "Cluster # " << iCluster << " has " << nLabels << " labels" << std::endl; // TODO: add to histogram
+          if (DEBUG_VERBOSE) {
+          std::cout << "Cluster # " << iCluster << " has " << nLabels << " labels" << std::endl; 
+          }
           //add to histogram
           h_nlabel->Fill(nLabels);
           auto nPilleUp = 0;
            for ( uint32_t i_lbl = 0 ; i_lbl < nLabels ; i_lbl++) {
+             h_sourceid->Fill(label[i_lbl].getSourceID());
              if (DEBUG_VERBOSE) {
                std::cout << "   EventID = " << label[i_lbl].getEventID() <<
         			   " ; trackID = " << label[i_lbl].getTrackID() <<
         			   " ; SourceID = " << label[i_lbl].getSourceID() <<
         			   " ; isFake = " << label[i_lbl].isFake() << std::endl;
-                h_sourceid->Fill(label[i_lbl].getSourceID());
              }
              if (label[i_lbl].isValid()) {
                nPilleUp++; // Increment pile up counter for this cluster. If > 1, more than one track contributed to this cluster.
@@ -177,7 +181,9 @@ void IBAclusterStats(int preciousSensorID = 21)
              } // isValid
            } // Loop labels
            if (nPilleUp > 1 ) {
+             if (DEBUG_VERBOSE) {
              std::cout << "  ================> Pilled up cluster with " << nPilleUp << " tracks" << std::endl;
+             }
              h_pileUp->Fill(nPilleUp); // Fill pullup
              // Perhaps nPilleUP should fill a histogram, rather than nLabels. nLabels counts noise.
          }
@@ -192,9 +198,9 @@ void IBAclusterStats(int preciousSensorID = 21)
     while(it != clusterPrimaryTrackCount.end()){
       if(it->second > 1){
          TrackWithMultipleClusters++;
-         std::cout << "size of nROF for trackID " << std::get<1>(it->first) << " EventID "<< std::get<0>(it->first) <<":" << clusterPrimaryTrackROFs[it->first].size() << std::endl;
          h_nROF_size->Fill(clusterPrimaryTrackROFs[it->first].size());
          if (DEBUG_VERBOSE) {
+           std::cout << "size of nROF for trackID " << std::get<1>(it->first) << " EventID "<< std::get<0>(it->first) <<":" << clusterPrimaryTrackROFs[it->first].size() << std::endl;
            std::cout << "ROFs are: ";
            for(auto i=0; i < clusterPrimaryTrackROFs[it->first].size();i++){
              std::cout << clusterPrimaryTrackROFs[it->first][i] << "(" << get<0>(PixelPositionOfPrimaryClusterROFs[it->first][i]) <<
@@ -231,6 +237,17 @@ void IBAclusterStats(int preciousSensorID = 21)
   h_pileUp->Draw();
   c1->cd(4);
   hEff->Draw();
+  
+  c1->Update();
+  
+  //Get painted graph in order to set a minimal value to the y axis.
+  auto eff_graph = hEff->GetPaintedGraph(); 
+  eff_graph->SetMinimum(0.95);
+  eff_graph->SetMaximum(1); 
+ 
+  c1->cd(4);
+  eff_graph->Draw();
+  
   c1->SaveAs("ALPIDESinglePixel_Eff.pdf");
 
   TFile* pFile = new TFile("ALPIDESinglePixel.root","recreate");

@@ -81,21 +81,21 @@ void IBAInteractionRate(int preciousSensorID = 24){
   }
 
   TGraph *gr1 = new TGraph(d_intRate.size(),&d_intRate[0],&efficiency[0]);
-  gr1->SetTitle("; IntRate; Efficiency");
+  gr1->SetTitle("; Protons/s; Efficiency");
 
   int max_x =  d_intRate.size() - 1;
   double max_value = d_intRate[max_x];
-  TF1 *efficiency_th = new TF1("Theoretical Efficiency","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/x/9.8805107e-06/2",0,max_value);
+  //TF1 *efficiency_th = new TF1("Theoretical Efficiency","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/x/9.8805107e-06/2",0,max_value);
 
   TLegend *legend = new TLegend(0.8,0.8,0.8,0.8);
   legend->AddEntry(gr1,"Simulation data","p");
-  legend->AddEntry(efficiency_th,"Theoretical eff.","l");
+  //legend->AddEntry(efficiency_th,"Theoretical eff.","l");
   legend->Draw();
 
   TCanvas *c1 = new TCanvas();
   c1->cd();
   gr1->Draw("A*");
-  efficiency_th->Draw("SAME");
+  //efficiency_th->Draw("SAME");
   legend->Draw();
   c1->SaveAs("Efficiency.pdf");
 

@@ -1,35 +1,26 @@
 # ALPIDE sensor for IBA
 
 * `macro/IBAclusterStats.C`: Some statistics on clusters production
-  * `$ root.exe -q IBAclusterStats.C+`
+  * `$ root.exe -q IBAclusterStats.C`
 * `macro/IBAInteractionRate.C`: Analysis of valid clusters as function of the interaction Rate.
-  * `$ root.exe -q IBAInteractionRate.C+`
+  * `$ root.exe -q IBAInteractionRate.C`
 * `scripts/Generate_single_proton_events.sh`: Generate proton events for each interaction rate provided.
-* `scripts/analyze_single_pronton_events.sh`: Apply root macro for simulations.
-* `scripts/generate_ir_list.sh`: Generate .txt list with interaction rates.
+* `scripts/plot_eff.sh`: Plot efficiency as function of interaction rate using the macro "IBAInteractionRate.C".
 * `o2-files/`: Files from o2 simulation that were modified. 
 
 ## Simulation Instructions
 
-Obs: These instruction will work only inside O2 environment and the folders "macros" and "scripts" must be in the same directory.
+OBS: The folder "alpide-iba" must be in the directory you want to make the simulation.
 
-For generating events using the `Generate_single_proton_events.sh`:
-* ` ./scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
+To simulate analyse its data with "IBAclusterStats.C":
+* `./alpide-iba/scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
 
-The command above generate 3 simulations with interaction rates of 10hz,20hz and 30hz with 10 events. 3 folders will be created, each of them with the name of the interaction rate.
+Where -n is the number of events and -i are the interaction rates that you want to make the simulation. For each interaction rate, one folder with the corresponding number will be created. 
 
-For analysing data using `analyze_single_pronton_events.sh`:
-* `./scripts/analyze_single_pronton_events.sh -i "10 20 30"`
-
-The command above execute the `IBAclusterStats.C` inside folder 10,20 and 30, generating histograms and a root file called "ALPIDESinglePixel.root".
+OBS:In order to decrease the time of simulation, the command above has the following strategy: If the number of events is less than 2000 or odd, the script will make just 1 simulation with the number provided. Otherwise, if the number of events is bigger than 2000 and even, (n/2000) simulations will be made. That's because we observed that as the number of events increase, slower is the simulation. 
 
 For generating the plot of efficiency (nClusterFromPrimareis/nPrimaries), you need to specify which interaction rates do you want to use to make the plot:
 
-* `./scripts/generate_ir_list.sh -i "10 20 30"`
+* `./scripts/plot_eff.sh -i "10 20 30"`
 
-The command above creates a list in .txt that contains the interaction rates provided, then:
-
-* `root.exe -b -q /macros/IBAInteractionRate.C`
-
-
-Will generate the efficiency by interaction rate plot.
+The command above will generate the efficiency by interaction rate plot.

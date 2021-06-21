@@ -23,17 +23,19 @@ dEvents=2000;
 if [ $((events%dEvents)) -eq 0 ]
 then
   echo "OK";
+  nDivisions=$((events/dEvents));
 else
-  echo "Tota events must be multiple of single events"
-  exit;
+  echo "Number of events is less than 2000 or is a odd number. then we will run the full simulation";
+  nDivisions=1;
+  dEvents=$events;
 fi
 
-nDivisions=$((events/dEvents));
 start=$SECONDS;
 
 for i in $ir
 do
   mkdir $i;
+  cp ~/alpide-iba/macros/IBAclusterStats.C $i;
   cd $i;
   echo "${nDivisions}" > nSim.txt;
   for (( nEv=1; nEv<=$nDivisions; nEv++ ))
@@ -46,6 +48,7 @@ do
     o2-mft-reco-workflow -b;
     cd ..;
   done
+  root.exe -b -q IBAclusterStats.C;
   cd ..;
 done
 duration=$(( SECONDS - start ))
