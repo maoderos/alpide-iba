@@ -35,7 +35,7 @@ start=$SECONDS;
 for i in $ir
 do
   mkdir $i;
-  cp ~/alpide-iba/macros/IBAclusterStats.C $i;
+  cp /alpide-iba/macros/IBAclusterStats.C $i;
   cd $i;
   echo "${nDivisions}" > nSim.txt;
   for (( nEv=1; nEv<=$nDivisions; nEv++ ))
