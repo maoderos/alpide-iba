@@ -57,8 +57,7 @@ void GeneratorFactory::setPrimaryGenerator(o2::conf::SimConfig const& conf, Fair
   auto makeBoxGen = [](int pdgid, int mult, double etamin, double etamax, double pmin, double pmax, double phimin, double phimax, bool debug = false) {
     auto gen = new FairBoxGenerator(pdgid, mult);
     gen->SetThetaRange(etamin, etamax);
-    gen->SetPRange(pmin, pmax);
-    //Change later to Kinetic energy
+    gen->SetEkinRange(pmin, pmax);
     gen->SetPhiRange(phimin, phimax);
     gen->SetDebug(debug);
     return gen;
