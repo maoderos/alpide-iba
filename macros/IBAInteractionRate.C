@@ -81,7 +81,7 @@ void IBAInteractionRate(int preciousSensorID = 24){
   }
 
   TGraph *gr1 = new TGraph(d_intRate.size(),&d_intRate[0],&efficiency[0]);
-  gr1->SetTitle("; Protons/s; Efficiency");
+  gr1->SetTitle("; Protons/s.cm^2; Efficiency");
 
   int max_x =  d_intRate.size() - 1;
   double max_value = d_intRate[max_x];
