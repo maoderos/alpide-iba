@@ -60,6 +60,7 @@ void GeneratorFactory::setPrimaryGenerator(o2::conf::SimConfig const& conf, Fair
     gen->SetEkinRange(pmin, pmax);
     gen->SetPhiRange(phimin, phimax);
     gen->SetDebug(debug);
+    gen->SetCosTheta();
     return gen;
   };
 
