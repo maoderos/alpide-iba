@@ -64,8 +64,10 @@ void IBAclusterStats(int preciousSensorID = 21)
   TH1* h_nlabel = new TH1F("nLabel","nLabel",100,0,10);
   //TH1* h_EnergyDeposited = new TH1F("Energy Deposited (keV)","Energy Deposited (keV)",100,0,10);
   TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
-  TH1* h_energyObserved = new TH1F("KinEnergyObserved","KineticEnergyObserved",10000,0.1e-3,1e-2);
-  TH1* h_energyMC = new TH1F("KineticEnergyMC","KineticEnergyMC",10000,0.1e-3,1e-2);
+  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",1500,0.1e-3,1e-2);
+  h_energyObserved->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
+  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",1500,0.1e-3,1e-2);
+  h_energyMC->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
   TH1* h_nROF_size = new TH1F("size_nROF", "size_nROF",100,0,10);
   TEfficiency* hEff = nullptr;
 
@@ -318,6 +320,7 @@ void IBAclusterStats(int preciousSensorID = 21)
   p3->SetLogy();
   p_energyDeposited->Draw("l");
   gr1->Draw("SAME l");
+  p3->BuildLegend();
   c1->cd(4);
   hEff->Draw();
   TPad* p4 = (TPad*)(c1->cd(4));
