@@ -30,7 +30,7 @@ bool DEBUG_VERBOSE = false;
 
 const double protonRestEnergy = 0.93827208816;
 const double epitaxialLayerThickness = 25; // in um
-
+//In code (30)
 //
 // $ root.exe -q IBAclusterStats.C+
 //
@@ -62,18 +62,20 @@ void IBAclusterStats(int preciousSensorID = 21)
 
   // Histogram
   TH1* h_nlabel = new TH1F("nLabel","nLabel",100,0,10);
-  //TH1* h_EnergyDeposited = new TH1F("Energy Deposited (keV)","Energy Deposited (keV)",100,0,10);
+  //TH1* h_EnergyDeposited = new TH1F("dE/dx (keV/um)","dE/dx (keV/um)",100,0,10);
   TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
-  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",1500,0.1e-3,1e-2);
+  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",100,0.0,1.0);
   h_energyObserved->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
-  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",1500,0.1e-3,1e-2);
+  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",100,0.0,1.0);
   h_energyMC->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
   TH1* h_nROF_size = new TH1F("size_nROF", "size_nROF",100,0,10);
   TEfficiency* hEff = nullptr;
 
-  TProfile* p_energyDeposited = new TProfile("energy_deposited vs energy", "energyDeposited vs energy",1000000,0,10,0,100);//100000
-  p_energyDeposited->SetTitle(";Kinetic Energy(GeV); Energy Deposited (KeV/um)");
-  p_energyDeposited->SetMarkerColor(2);
+  TProfile* p_energyDeposited = new TProfile("Geant4 Simulation", "Geant4 Simulation",1000000,0,1,0,100);//100000
+  p_energyDeposited->SetTitle(";Kinetic Energy(GeV); dE/dx (keV/um)");
+  //p_energyDeposited->SetMarkerColor(9);
+  //  p_energyDeposited->SetLineColor(9);
+  //p_energyDeposited->SetMarkerStyle(3);
 
   std::map<double,std::vector<double>> energy_edep;
 
@@ -159,8 +161,8 @@ void IBAclusterStats(int preciousSensorID = 21)
            o2SimKineTree->GetEntry(nEvent);
            MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
            if ((mcTrack->isPrimary()) && (sensorID == preciousSensorID)) { // if hit is caused by a primary:
-             double kineticEnergy = mcTrack->GetEnergy() - protonRestEnergy;
-
+             //double kineticEnergy = mcTrack->GetEnergy() - protonRestEnergy;
+             double kineticEnergy = hit->GetTotalEnergy() - protonRestEnergy;
              double theta = mcTrack->GetTheta();
              double distance = TMath::Abs(epitaxialLayerThickness/(TMath::Cos(theta)));
              double energyLoss = (hit->GetEnergyLoss())*1e6; // tranform to KeV
@@ -297,8 +299,11 @@ void IBAclusterStats(int preciousSensorID = 21)
  }
   
   TGraph *gr1 = new TGraph(TheoEnergy.size(), &TheoEnergy[0], &TheoLossEnergy[0]);
-
+  gr1->SetTitle("SRIM-2013");
+  gr1->SetMarkerColor(2);
+  gr1->SetLineColor(2);
   hEff = new TEfficiency(*h_energyObserved, *h_energyMC);
+  hEff->SetTitle("Efficiency");
 
   TCanvas *c1 = new TCanvas();
   c1->Divide(2,2); // divides
@@ -306,31 +311,28 @@ void IBAclusterStats(int preciousSensorID = 21)
 
   c1->cd(1);
   TPad* p1 = (TPad*)(c1->cd(1));
-  //p1->SetLogx();
-  //p1->SetLogy();
+  
   h_energyMC->Draw();
   c1->cd(2);
   h_energyObserved->Draw();
   TPad* p2 = (TPad*)(c1->cd(2));
-  //p2->SetLogx();
-  //p2->SetLogy();
+
   c1->cd(3);
   TPad* p3 = (TPad*)(c1->cd(3));
   p3->SetLogx();
   p3->SetLogy();
-  p_energyDeposited->Draw("l");
+  p_energyDeposited->Draw("E1");
   gr1->Draw("SAME l");
   p3->BuildLegend();
   c1->cd(4);
   hEff->Draw();
   TPad* p4 = (TPad*)(c1->cd(4));
-  //p4->SetLogx();  
   c1->Update();
 
   //Get painted graph in order to set a minimal value to the y axis.
   auto eff_graph = hEff->GetPaintedGraph();
-  //eff_graph->SetMinimum(0.95);
-  eff_graph->SetMaximum(1);
+  eff_graph->SetMinimum(0.0);
+  eff_graph->SetMaximum(1.05);
 
   c1->cd(4);
   eff_graph->Draw();
@@ -346,6 +348,8 @@ void IBAclusterStats(int preciousSensorID = 21)
   h_sourceid->Write();
   h_nlabel->Write();
   h_nROF_size->Write();
+  p_energyDeposited->Write();
+  gr1->Write();
   c1->Write();
 
   // Store some parameters
@@ -356,7 +360,7 @@ void IBAclusterStats(int preciousSensorID = 21)
   pFile->Close();
 
 
-
+/*
   //Energy analysis
   TCanvas* c2 = new TCanvas();
   c2->cd();
@@ -367,7 +371,7 @@ void IBAclusterStats(int preciousSensorID = 21)
   p_energyDeposited->Draw("l");
   gr1->Draw("SAME");
   c2->BuildLegend();
-  c2->SaveAs("energyDeposited.pdf");
-
+  c2->SaveAs(".pdf");
+*/
 
 }
