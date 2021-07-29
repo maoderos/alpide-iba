@@ -29,7 +29,7 @@ using o2::itsmft::Hit;
 bool DEBUG_VERBOSE = false;
 
 const double protonRestEnergy = 0.93827208816;
-const double epitaxialLayerThickness = 25; // in um
+const double epitaxialLayerThickness = 30; // in um
 //In code (30)
 //
 // $ root.exe -q IBAclusterStats.C+
@@ -64,9 +64,10 @@ void IBAclusterStats(int preciousSensorID = 21)
   TH1* h_nlabel = new TH1F("nLabel","nLabel",100,0,10);
   //TH1* h_EnergyDeposited = new TH1F("dE/dx (keV/um)","dE/dx (keV/um)",100,0,10);
   TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
-  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",250,0.0002,0.0007);
+  TH1* h_pileUp = new TH1F("pileUp","pileUp",100,0,10);
+  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",500,0.001,0.01);
   h_energyObserved->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
-  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",250,0.0002,0.0007);
+  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",500,0.001,0.01);
   h_energyMC->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
   TH1* h_nROF_size = new TH1F("size_nROF", "size_nROF",100,0,10);
   TEfficiency* hEff = nullptr;
@@ -165,7 +166,7 @@ void IBAclusterStats(int preciousSensorID = 21)
              double kineticEnergy = hit->GetTotalEnergy() - protonRestEnergy;
              double theta = mcTrack->GetTheta();
              double distance = TMath::Abs(epitaxialLayerThickness/(TMath::Cos(theta)));
-             double energyLoss = (hit->GetEnergyLoss())*1e6; // tranform to KeV
+             double energyLoss = (hit->GetEnergyLoss())*1e6; // tranform to keV
              //h_EnergyDeposited->Fill(energyLoss);
              //std::cout << (energyLoss/distance) << std::endl;
              p_energyDeposited->Fill(kineticEnergy,(energyLoss/distance));
@@ -236,6 +237,7 @@ void IBAclusterStats(int preciousSensorID = 21)
 
              } // isValid
            } // Loop labels
+           h_pileUp->Fill(nPilleUp); // Fill pullup
            if (nPilleUp > 1 ) {
              if (DEBUG_VERBOSE) {
              std::cout << "  ================> Pilled up cluster with " << nPilleUp << " tracks" << std::endl;
@@ -297,6 +299,7 @@ void IBAclusterStats(int preciousSensorID = 21)
     TheoLossEnergy.push_back(lossEnergy);
 
  }
+
   
   TGraph *gr1 = new TGraph(TheoEnergy.size(), &TheoEnergy[0], &TheoLossEnergy[0]);
   gr1->SetTitle("SRIM-2013");
@@ -346,9 +349,11 @@ void IBAclusterStats(int preciousSensorID = 21)
   hEff->Write();
   p_energyDeposited->Write();
   h_sourceid->Write();
+  h_pileUp->Write();
   h_nlabel->Write();
   h_nROF_size->Write();
   p_energyDeposited->Write();
+  hEff->Write();
   gr1->Write();
   c1->Write();
 
