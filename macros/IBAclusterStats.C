@@ -364,4 +364,10 @@ void IBAclusterStats(int preciousSensorID = 21)
   pFile->WriteObject(&nClustersFromPrimaries,"nClustersFromPrimaries");
   pFile->Close();
 
+  //Energy analysis
+  TCanvas* c2 = new TCanvas();
+  c2->cd();
+  p_energyDeposited->Draw();
+  c2->SaveAs("energyDeposited.pdf");
+
 }
