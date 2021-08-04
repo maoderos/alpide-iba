@@ -43,8 +43,8 @@ do
   do
     mkdir $nEv;
     cd $nEv;
-    cp ~/alice/MFTdictionary.bin .;
-    o2-sim -m MFT -e $geant -g boxgen -j $workers -n $dEvents --configKeyValues 'BoxGun.pdg=2212 ; BoxGun.eta[0]=179.70 ; BoxGun.eta[1]=180.00; BoxGun.prange[0]=0.001; BoxGun.prange[1]=0.01; BoxGun.number=400; Diamond.position[0]=-2.00;Diamond.position[1]=-3.546;Diamond.position[2]=80.000;Diamond.width[2]=0; MFTBase.buildHeatExchanger=false; MFTBase.buildFlex=false; MFTBase.minimal=true;';
+    cp ../../alpide-iba/MFTdictionary.bin .;
+    o2-sim -m MFT -e $geant -g boxgen -j $workers -n $dEvents --configKeyValues 'BoxGun.pdg=2212 ; BoxGun.eta[0]=179.70 ; BoxGun.eta[1]=180.00; BoxGun.prange[0]=0.0002; BoxGun.prange[1]=0.005; BoxGun.number=400; Diamond.position[0]=-2.00;Diamond.position[1]=-3.546;Diamond.position[2]=80.000;Diamond.width[2]=0; MFTBase.buildHeatExchanger=false; MFTBase.buildFlex=false; MFTBase.minimal=true;';
     o2-sim-digitizer-workflow -b --skipDet TPC,ITS,TOF,FT0,EMC,HMP,ZDC,TRD,MCH,MID,FDD,PHS,FV0,CPV --interactionRate $i --configKeyValues "MFTDigitizerParam.noisePerPixel=0";
     o2-mft-reco-workflow -b;
     cd ..;

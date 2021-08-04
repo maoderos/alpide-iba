@@ -65,14 +65,14 @@ void IBAclusterStats(int preciousSensorID = 21)
   //TH1* h_EnergyDeposited = new TH1F("dE/dx (keV/um)","dE/dx (keV/um)",100,0,10);
   TH1* h_sourceid = new TH1F("sourceID","sourceID",100,0,300);
   TH1* h_pileUp = new TH1F("pileUp","pileUp",100,0,10);
-  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",500,0.001,0.01);
+  TH1* h_energyObserved = new TH1F("MC Kinetic energy of observed ions","MC Kinetic energy of observed ions",250,0.0002,0.00065);
   h_energyObserved->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
-  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",500,0.001,0.01);
+  TH1* h_energyMC = new TH1F("MC Kinetic energy","MC Kinetic energy",250,0.0002,0.00065);
   h_energyMC->GetXaxis()->SetTitle("Kinetic Energy (GeV)");
   TH1* h_nROF_size = new TH1F("size_nROF", "size_nROF",100,0,10);
   TEfficiency* hEff = nullptr;
 
-  TProfile* p_energyDeposited = new TProfile("Geant4 Simulation", "Geant4 Simulation",1000000,0,1,0,100);//100000
+  TProfile* p_energyDeposited = new TProfile("Geant4 Simulation", "Geant4 Simulation",10000,5e-06,0.1,0,100);//100000
   p_energyDeposited->SetTitle(";Kinetic Energy(GeV); dE/dx (keV/um)");
   //p_energyDeposited->SetMarkerColor(9);
   //  p_energyDeposited->SetLineColor(9);
@@ -148,9 +148,6 @@ void IBAclusterStats(int preciousSensorID = 21)
     }
 
     // Hits analysis
-    // Needs improvement.
-
-     //std::map<std::tupĺe<int,int>, >
      std::cout << "Number of entries on o2sim_HitsMFT: " << mftHitsTree->GetEntries() << std::endl;
      for  (int nEvent = 0; nEvent < mftHitsTree->GetEntries(); nEvent++){
        mftHitsTree->GetEntry(nEvent);
@@ -162,16 +159,19 @@ void IBAclusterStats(int preciousSensorID = 21)
            o2SimKineTree->GetEntry(nEvent);
            MCTrackT<float>* mcTrack =  &(*mcTr).at(trackID);
            if ((mcTrack->isPrimary()) && (sensorID == preciousSensorID)) { // if hit is caused by a primary:
-             //double kineticEnergy = mcTrack->GetEnergy() - protonRestEnergy;
              double kineticEnergy = hit->GetTotalEnergy() - protonRestEnergy;
-             double theta = mcTrack->GetTheta();
-             double distance = TMath::Abs(epitaxialLayerThickness/(TMath::Cos(theta)));
-             double energyLoss = (hit->GetEnergyLoss())*1e6; // tranform to keV
-             //h_EnergyDeposited->Fill(energyLoss);
-             //std::cout << (energyLoss/distance) << std::endl;
-             p_energyDeposited->Fill(kineticEnergy,(energyLoss/distance));
+             auto initial_pos = hit->GetPosStart();
+             auto final_pos = hit->GetPos();
+             auto distance_square = (final_pos.X() - initial_pos.X())*(final_pos.X() - initial_pos.X()) + 
+                                    (final_pos.Y() - initial_pos.Y())*(final_pos.Y() - initial_pos.Y()) + 
+                                    (final_pos.Z() - initial_pos.Z())*(final_pos.Z() - initial_pos.Z());
              
-
+             auto distance = TMath::Sqrt(distance_square)*(1e4); // cm to um 
+             double energyLoss = (hit->GetEnergyLoss())*1e6; // tranform to keV
+             double kineticEnergy_final = kineticEnergy - hit->GetEnergyLoss();
+             double mean_energy = (kineticEnergy_final + kineticEnergy)/2;
+             p_energyDeposited->Fill(mean_energy,(1.0*energyLoss/distance));
+             
            }
        }
      }
@@ -363,20 +363,5 @@ void IBAclusterStats(int preciousSensorID = 21)
   pFile->WriteObject(&nPrimaries_,"nPrimaries");
   pFile->WriteObject(&nClustersFromPrimaries,"nClustersFromPrimaries");
   pFile->Close();
-
-
-/*
-  //Energy analysis
-  TCanvas* c2 = new TCanvas();
-  c2->cd();
-  c2->SetLogy();
-  c2->SetLogx();
-  //c2->SetLogx();
-  //p_energyDeposited->SetRangeUser(0, 1e-2, "X");
-  p_energyDeposited->Draw("l");
-  gr1->Draw("SAME");
-  c2->BuildLegend();
-  c2->SaveAs(".pdf");
-*/
 
 }
