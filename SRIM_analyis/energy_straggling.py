@@ -59,7 +59,7 @@ def format_file(filename,element): # Format SRIM tables and return lists
     return data_array
 
 
-elements = ["H", "He", "Be", "B", "C", "N", "O", "F", "Ne"]
+elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
 #elements = ["H"]
 radical = "Al-Si-O.txt"
 
@@ -115,6 +115,8 @@ for element in elements: #Loop in all files of folder
     print('Longitudinal straggling at 15um: dx = {0}'.format(long_strag[pos_15]))
     print('Correspondent kinEn for range of {0} um: E = {1} MeV'.format(long_strag[pos_15],energy_straggling))
     print('is interpolation necessary: {0}'.format(need_interpol))
+    print("nearest point: {0} um".format(near_point))
+    print('range interpolation: {0} MeV'.format(kinEn_interp))
 
     #plt.xlabel("range($\mu$m)")
     #plt.ylabel("Kinetic Energy (MeV)")
