@@ -1,8 +1,3 @@
-# TODO: Test interpolation to see if 15um file is necessary 
-# Correct the sort problem (DONE)
-# Study interpolation in python and types
-# If yes -> Integral for 15 + sigma and 15 - sigma -> Get Sigma from file (?)
-# If no -> Get values, insert into list, interpolate to straggling and integrate 
 
 import os
 import sys
@@ -13,7 +8,18 @@ import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
 import scipy.integrate as integrate
 
-metal_stack_thick = 15.00 # in um 
+alpide_thick = 15.0 # in um 
+
+
+#--------Initial values----------
+
+#elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+elements = ["B"]
+initial_energy = [10,20,30] # MeV
+radical = "Al-Si-O.txt"
+thickness = 15.0 #in um
+EnergyLossTable = False
+
 
 def find_nearest(array, value):
     array = np.asarray(array)
@@ -31,39 +37,37 @@ def line_filter(line):
     line8 = line7.replace("  "," ")
     line9 = line8.replace(",",".")
     line_final = line9[1:]
-    print(line_final)
+    #print(line_final)
     return line_final
 
 
-def get_15um_line(filename): # get line with data from 15um from SRIM table
-    file = open("15um_values_metalStack/{0}".format(filename), "r") 
+def get_thick_line(filename,value): # get line with data from 50um from SRIM table
+    file = open("specialValues/{0}".format(filename), "r") 
+    value = str(value)
+    value_find = value.replace(".",",")
     for line in file:
-        if re.search("15,00 um",line) or re.search("15,01 um",line):
+        if re.search(value_find,line):
             line_format = line_filter(line)
             return line_format
             
 
 def format_file(filename,element): # Format SRIM tables and return lists
     kinEn =[]; dE_dx = []; range = []; long_strag =[]; lat_strag = [];
-    file = open("tables_metalStack/{0}".format(filename), "r") 
+    file = open("tables/{0}".format(filename), "r") 
     lines_data = []
     for i, line in enumerate(file):
         if i in np.arange(25, 130): 
             lines_data.append(line_filter(line)) 
     # After getting a list of lines of data, get the line of 15um, add it to list and sort it.
-    lines_data.append(get_15um_line(filename))
+    lines_data.append(get_thick_line(filename,thickness))
     #lines_data.append(line_format_15)
     data_array_unsort = np.loadtxt(lines_data)
     #sort numpy array by the first collumn
     data_array = data_array_unsort[np.argsort(data_array_unsort[:, 0])]
-    
     return data_array
 
-
-#elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
-elements = ["H"]
-radical = "Al-Si-O.txt"
-
+print("---------------" + radical[:-4] + "-----------------------")
+print("Thickness =", thickness)
 
 for element in elements: #Loop in all files of folder
     filename = "{0}_{1}".format(element, radical)
@@ -76,55 +80,55 @@ for element in elements: #Loop in all files of folder
     #-------- interpolation -------------
 
 
-    # fist, we need to find the position of range 15 or 15.01 in array
-    pos_1500, = np.where(range == 15.00)
-    pos_1501, = np.where(range == 15.01)
-    if pos_1500.size != 0:
-        pos_15, = np.where(range == 15.00)
-    elif pos_1501.size != 0:
-        pos_15, = np.where(range == 15.01)
-
-   
-    
-    #interpolate 3 adjacent points between 15um
-    #range_interp = range[pos_15[0] - 4:pos_15[0] + 5]
-    #dE_dx_interp = dE_dx[pos_15[0] - 4:pos_15[0] + 5]
+    # fist, we need to find the position of range 15 
+    value_near = find_nearest(range, thickness)
+    pos, = np.where(range == value_near)
 
     # Now we find the nearest point of range in tables giving the longitudinal
-    # straggling of 15um
+    # straggling 
 
-    near_point = find_nearest(range, long_strag[pos_15])
+    near_point = find_nearest(range, long_strag[pos])
 
     need_interpol = True
     near_p_idx, = np.where(range == near_point)
-    if near_point > long_strag[pos_15]:
+    if near_point > long_strag[pos]:
         range_interp = range[near_p_idx[0]-1:near_p_idx[0] + 1]
         kinEn_interp = kinEn[near_p_idx[0]-1:near_p_idx[0] + 1]
         range_graph = range[near_p_idx[0]-3:near_p_idx[0] + 4]
         kinEn_graph = kinEn[near_p_idx[0]-3:near_p_idx[0] + 4]
-    elif near_point < long_strag[pos_15]:
+    elif near_point < long_strag[pos]:
         range_interp = range[near_p_idx[0]:near_p_idx[0] + 2]
         kinEn_interp = kinEn[near_p_idx[0]:near_p_idx[0] + 2]
         range_graph = range[near_p_idx[0]-2:near_p_idx[0] + 4]
         kinEn_graph = kinEn[near_p_idx[0]-2:near_p_idx[0] + 4]
-    elif near_point == long_strag[pos_15]:
+    elif near_point == long_strag[pos]:
         need_interpol = False
-        energy_straggling_array, = kinEn[np.where(range == long_strag[pos_15])]
+        energy_straggling_array, = kinEn[np.where(range == long_strag[pos])]
         energy_straggling = energy_straggling_array[0]
     
     # if the nearest point doesnt appear in table, intepolate to estimate kinEn
 
     if (need_interpol):
         interp_function = interpolate.interp1d(range_interp, kinEn_interp, kind='linear')
-        energy_straggling = interp_function(long_strag[pos_15])
+        energy_straggling = interp_function(long_strag[pos])
+
+    #Fraction of energy loss given the initial energy
 
 
     print('---------------------{0}-----------------'.format(element))
-    print('Longitudinal straggling at 15um: dx = {0}'.format(long_strag[pos_15]))
-    print('Correspondent kinEn for range of {0} um: E = {1} MeV'.format(long_strag[pos_15],energy_straggling))
+    print('Longitudinal straggling at {0}um: dx = {1}'.format(value_near,long_strag[pos]))
+    print('Correspondent kinEn for range of {0} um: E = {1} MeV'.format(long_strag[pos],energy_straggling))
     print('is interpolation necessary: {0}'.format(need_interpol))
     print("nearest point: {0} um".format(near_point))
     print('range interpolation: {0} MeV'.format(kinEn_interp))
+    if(EnergyLossTable):
+        for i in initial_energy:
+            en_idx = np.where(kinEn==i)
+            energy_loss = (dE_dx[en_idx]*alpide_thick)*(1e-03) #to MeV
+            fraction_loss = energy_loss/dE_dx[en_idx]
+            print("Fraction of initial kinetic energy loss for: \n")
+            print("{0} Mev ----> {1}".format(i,fraction_loss) )
+
 
     #plt.xlabel("range($\mu$m)")
     #plt.ylabel("Kinetic Energy (MeV)")
