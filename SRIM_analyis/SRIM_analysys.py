@@ -8,16 +8,15 @@ import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
 import scipy.integrate as integrate
 
-alpide_thick = 15.0 # in um 
 
 
 #--------Initial values----------
 
-#elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
-elements = ["B"]
-initial_energy = [10,20,30] # MeV
-radical = "Al-Si-O.txt"
-thickness = 15.0 #in um
+elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+#elements = ["B"]
+initial_energy = [5,10,15,20,25,30,35,40,35,50,55,60,65,70,80,90,100] # MeV
+radical = "alpide.txt"
+thickness = 50.0 #in um
 EnergyLossTable = False
 
 
@@ -43,8 +42,7 @@ def line_filter(line):
 
 def get_thick_line(filename,value): # get line with data from 50um from SRIM table
     file = open("specialValues/{0}".format(filename), "r") 
-    value = str(value)
-    value_find = value.replace(".",",")
+    value_find = str(value)
     for line in file:
         if re.search(value_find,line):
             line_format = line_filter(line)
@@ -52,14 +50,21 @@ def get_thick_line(filename,value): # get line with data from 50um from SRIM tab
             
 
 def format_file(filename,element): # Format SRIM tables and return lists
-    kinEn =[]; dE_dx = []; range = []; long_strag =[]; lat_strag = [];
     file = open("tables/{0}".format(filename), "r") 
     lines_data = []
     for i, line in enumerate(file):
         if i in np.arange(25, 130): 
             lines_data.append(line_filter(line)) 
     # After getting a list of lines of data, get the line of 15um, add it to list and sort it.
-    lines_data.append(get_thick_line(filename,thickness))
+    line_special = get_thick_line(filename,thickness)
+    repeated_line = False
+    for j in lines_data:
+        if j == line_special:
+            repeated_line = True
+        
+    if not repeated_line:
+        lines_data.append( line_special)
+
     #lines_data.append(line_format_15)
     data_array_unsort = np.loadtxt(lines_data)
     #sort numpy array by the first collumn
@@ -82,11 +87,12 @@ for element in elements: #Loop in all files of folder
 
     # fist, we need to find the position of range 15 
     value_near = find_nearest(range, thickness)
+    print(value_near)
     pos, = np.where(range == value_near)
 
     # Now we find the nearest point of range in tables giving the longitudinal
     # straggling 
-
+    print(pos)
     near_point = find_nearest(range, long_strag[pos])
 
     need_interpol = True
@@ -103,8 +109,8 @@ for element in elements: #Loop in all files of folder
         kinEn_graph = kinEn[near_p_idx[0]-2:near_p_idx[0] + 4]
     elif near_point == long_strag[pos]:
         need_interpol = False
-        energy_straggling_array, = kinEn[np.where(range == long_strag[pos])]
-        energy_straggling = energy_straggling_array[0]
+        energy_straggling_index, = np.where(range == long_strag[pos])
+        energy_straggling = kinEn[energy_straggling_index[0]]
     
     # if the nearest point doesnt appear in table, intepolate to estimate kinEn
 
@@ -116,16 +122,16 @@ for element in elements: #Loop in all files of folder
 
 
     print('---------------------{0}-----------------'.format(element))
-    print('Longitudinal straggling at {0}um: dx = {1}'.format(value_near,long_strag[pos]))
+    print('Longitudinal straggling at {0}um and {2}: dx = {1}'.format(value_near,long_strag[pos],kinEn[pos]))
     print('Correspondent kinEn for range of {0} um: E = {1} MeV'.format(long_strag[pos],energy_straggling))
     print('is interpolation necessary: {0}'.format(need_interpol))
     print("nearest point: {0} um".format(near_point))
     print('range interpolation: {0} MeV'.format(kinEn_interp))
     if(EnergyLossTable):
         for i in initial_energy:
-            en_idx = np.where(kinEn==i)
-            energy_loss = (dE_dx[en_idx]*alpide_thick)*(1e-03) #to MeV
-            fraction_loss = energy_loss/dE_dx[en_idx]
+            en_idx, = np.where(kinEn==i)
+            energy_loss = (dE_dx[en_idx[0]]*thickness)*(1e-03) #to MeV
+            fraction_loss = energy_loss/kinEn[en_idx[0]]
             print("Fraction of initial kinetic energy loss for: \n")
             print("{0} Mev ----> {1}".format(i,fraction_loss) )
 

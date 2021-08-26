@@ -1,39 +1,39 @@
  ==================================================================
               SRIM version ---> SRIM-2013.00
-              Calc. date   ---> julho 29, 2021 
+              Calc. date   ---> August 24, 2021 
  ==================================================================
 
- Disk File Name = SRIM Outputs\Fluorine in Al-Si- O.txt
+ Disk File Name = SRIM Outputs\F-Al-Si-O.txt
 
- Ion = Fluorine [9] , Mass = 18,998 amu
+ Ion = Fluorine [9] , Mass = 18.998 amu
 
- Target Density =  2,2800E+00 g/cm3 = 6,0872E+22 atoms/cm3
+ Target Density =  2.2800E+00 g/cm3 = 6.0874E+22 atoms/cm3
  ======= Target  Composition ========
     Atom   Atom   Atomic    Mass     
     Name   Numb   Percent   Percent  
     ----   ----   -------   -------  
-     Al     13    017,00    020,34   
-     Si     14    038,80    048,31   
-      O      8    044,20    031,35   
+     Al     13    017.00    020.33   
+     Si     14    038.80    048.31   
+      O      8    044.21    031.36   
  ====================================
- Bragg Correction = 0,00%
+ Bragg Correction = 0.00%
  Stopping Units =  keV / micron   
  See bottom of Table for other Stopping units 
 
         Ion        dE/dx      dE/dx     Projected  Longitudinal   Lateral
        Energy      Elec.      Nuclear     Range     Straggling   Straggling
   --------------  ---------- ---------- ----------  ----------  ----------
-  26,06 MeV   1,709E+03  1,885E+00   15,00 um     5045 A      4400 A   
+  17.20 MeV   1.847E+03  2.691E+00   10.01 um     3554 A      3880 A   
 -----------------------------------------------------------
  Multiply Stopping by        for Stopping Units
  -------------------        ------------------
-  1,0000E-01                 eV / Angstrom 
-  1,0000E+00                keV / micron   
-  1,0000E+00                MeV / mm       
-  4,3861E-03                keV / (ug/cm2) 
-  4,3861E-03                MeV / (mg/cm2) 
-  4,3861E+00                keV / (mg/cm2) 
-  1,6428E-01                 eV / (1E15 atoms/cm2)
-  1,2891E-03                L.S.S. reduced units
+  1.0000E-01                 eV / Angstrom 
+  1.0000E+00                keV / micron   
+  1.0000E+00                MeV / mm       
+  4.3861E-03                keV / (ug/cm2) 
+  4.3861E-03                MeV / (mg/cm2) 
+  4.3861E+00                keV / (mg/cm2) 
+  1.6427E-01                 eV / (1E15 atoms/cm2)
+  1.2890E-03                L.S.S. reduced units
  ==================================================================
  (C) 1984,1989,1992,1998,2008 by J.P. Biersack and J.F. Ziegler

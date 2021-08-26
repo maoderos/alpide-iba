@@ -1,0 +1,82 @@
+---------------Al-Si-O-----------------------
+Thickness = 10.0
+10.06
+[50]
+---------------------H-----------------
+Longitudinal straggling at 10.06um and [0.735]: dx = [0.4466]
+Correspondent kinEn for range of [0.4466] um: E = [0.04126521] MeV
+is interpolation necessary: True
+nearest point: 0.4362 um
+range interpolation: [0.04  0.045] MeV
+10.04
+[64]
+---------------------He-----------------
+Longitudinal straggling at 10.04um and [2.68]: dx = [0.3969]
+Correspondent kinEn for range of [0.3969] um: E = [0.046] MeV
+is interpolation necessary: True
+nearest point: 0.3904 um
+range interpolation: [0.045 0.05 ] MeV
+10.06
+[71]
+---------------------Li-----------------
+Longitudinal straggling at 10.06um and [4.65]: dx = [0.3824]
+Correspondent kinEn for range of [0.3824] um: E = [0.05734155] MeV
+is interpolation necessary: True
+nearest point: 0.3691 um
+range interpolation: [0.055 0.06 ] MeV
+9.96
+[74]
+---------------------Be-----------------
+Longitudinal straggling at 9.96um and [6.5]: dx = [0.3852]
+Correspondent kinEn for range of [0.3852] um: E = [0.07400891] MeV
+is interpolation necessary: True
+nearest point: 0.3672 um
+range interpolation: [0.07 0.08] MeV
+10.0
+[77]
+---------------------B-----------------
+Longitudinal straggling at 10.0um and [8.76]: dx = [0.3693]
+Correspondent kinEn for range of [0.3693] um: E = [0.11079038] MeV
+is interpolation necessary: True
+nearest point: 0.367 um
+range interpolation: [0.11 0.12] MeV
+10.06
+[79]
+---------------------C-----------------
+Longitudinal straggling at 10.06um and [10.9]: dx = [0.3735]
+Correspondent kinEn for range of [0.3735] um: E = [0.12777778] MeV
+is interpolation necessary: True
+nearest point: 0.3793 um
+range interpolation: [0.12 0.13] MeV
+10.0
+[81]
+---------------------N-----------------
+Longitudinal straggling at 10.0um and [13.]: dx = [0.363]
+Correspondent kinEn for range of [0.363] um: E = [0.1444206] MeV
+is interpolation necessary: True
+nearest point: 0.3527 um
+range interpolation: [0.14 0.15] MeV
+10.04
+[83]
+---------------------O-----------------
+Longitudinal straggling at 10.04um and [15.]: dx = [0.3636]
+Correspondent kinEn for range of [0.3636] um: E = [0.15265766] MeV
+is interpolation necessary: True
+nearest point: 0.3577 um
+range interpolation: [0.15 0.16] MeV
+10.01
+[86]
+---------------------F-----------------
+Longitudinal straggling at 10.01um and [17.2]: dx = [0.3554]
+Correspondent kinEn for range of [0.3554] um: E = [0.15678899] MeV
+is interpolation necessary: True
+nearest point: 0.3624 um
+range interpolation: [0.15 0.16] MeV
+10.01
+[87]
+---------------------Ne-----------------
+Longitudinal straggling at 10.01um and [18.3]: dx = [0.3637]
+Correspondent kinEn for range of [0.3637] um: E = [0.1722488] MeV
+is interpolation necessary: True
+nearest point: 0.359 um
+range interpolation: [0.17 0.18] MeV

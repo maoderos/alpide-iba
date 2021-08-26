@@ -1,0 +1,592 @@
+---------------alpide-----------------------
+Thickness = 50.0
+50.05
+[62]
+---------------------H-----------------
+Longitudinal straggling at 50.05um: dx = [2.08]
+Correspondent kinEn for range of [2.08] um: E = [0.21964286] MeV
+is interpolation necessary: True
+nearest point: 2.14 um
+range interpolation: [0.2   0.225] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 0.13487533000000002
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 0.039930395
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 0.019436136666666666
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 0.01163299
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 0.007807594
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 0.005635874999999999
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.004279038571428572
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.00337147
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.004279038571428572
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.0022659607000000003
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.0019135282727272727
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.0016406785
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.0014244285384615383
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.0012497912857142859
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.00098851675
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.0008047572222222223
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.0006702557500000001
+50.06
+[77]
+---------------------He-----------------
+Longitudinal straggling at 50.06um: dx = [2.04]
+Correspondent kinEn for range of [2.04] um: E = [0.50666667] MeV
+is interpolation necessary: True
+nearest point: 2.02 um
+range interpolation: [0.5  0.55] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 1.4050740000000002
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 0.44734339999999995
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 0.22297019999999998
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 0.13530455000000002
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 0.09157219999999999
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 0.06645363333333333
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.05061332857142856
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.0399589375
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.05061332857142856
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.02688404000000001
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.022684445454545454
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.019426600000000002
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.016839299999999998
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.014750264285714288
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.011618246874999998
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.009410148333333333
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.007793757500000001
+50.04
+[85]
+---------------------Li-----------------
+Longitudinal straggling at 50.04um: dx = [1.76]
+Correspondent kinEn for range of [1.76] um: E = [0.49583333] MeV
+is interpolation necessary: True
+nearest point: 1.77 um
+range interpolation: [0.45 0.5 ] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 4.124931000000001
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 1.455581
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 0.7571726666666667
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 0.4612947500000001
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 0.31419374
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 0.2291374
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.1752455857142857
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.138704825
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.1752455857142857
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.09372235000000001
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.07921643636363637
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.06792873333333334
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.058947238461538466
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.051691964285714286
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.0407714875
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.033061622222222226
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.027399065
+50.02
+[89]
+---------------------Be-----------------
+Longitudinal straggling at 50.02um: dx = [1.77]
+Correspondent kinEn for range of [1.77] um: E = [0.63333333] MeV
+is interpolation necessary: True
+nearest point: 1.8 um
+range interpolation: [0.6  0.65] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 6.546493
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 2.651348
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 1.5071020000000002
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 0.9868932499999999
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 0.6896232000000001
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 0.511467
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.39436757142857143
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.31317475000000006
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.39436757142857143
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.2108147
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.17745945454545456
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.15141464999999998
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.1307622
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.11406075714285714
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.08904718750000001
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.07159330555555556
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.05888092
+50.03
+[93]
+---------------------B-----------------
+Longitudinal straggling at 50.03um: dx = [1.7]
+Correspondent kinEn for range of [1.7] um: E = [0.91666667] MeV
+is interpolation necessary: True
+nearest point: 1.68 um
+range interpolation: [0.9 1. ] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 9.05447
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 3.9847970000000004
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 2.3743546666666666
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 1.6044315
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 1.1605782
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 0.8708861666666666
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.6802711428571427
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.545947125
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.6802711428571427
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.3738116
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.31681318181818185
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.2719000833333334
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.2359752307692308
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.20675507142857144
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.16264968750000003
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.13145866666666667
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.10860719999999999
+50.05
+[96]
+---------------------C-----------------
+Longitudinal straggling at 50.05um: dx = [1.61]
+Correspondent kinEn for range of [1.61] um: E = 1.0 MeV
+is interpolation necessary: False
+nearest point: 1.61 um
+range interpolation: [0.9 1. ] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 11.55339
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 5.2315249999999995
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 3.1837413333333333
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 2.19379925
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 1.6215862000000003
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 1.2361768333333332
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.9787747142857145
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 0.7948668750000001
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 0.9787747142857145
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.5544234
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.4732703636363636
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.4087295
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.35650507692307687
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.31374307142857144
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.24844593750000005
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.20171794444444444
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.16713755000000002
+50.03
+[98]
+---------------------N-----------------
+Longitudinal straggling at 50.03um: dx = [1.7]
+Correspondent kinEn for range of [1.7] um: E = [1.2375] MeV
+is interpolation necessary: True
+nearest point: 1.67 um
+range interpolation: [1.2 1.3] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 13.945789999999999
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 6.66002
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 4.1914
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 2.9577725
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 2.2258298
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 1.746302
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 1.3926901428571428
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 1.1430099999999999
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 1.3926901428571428
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 0.8113001
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.6975090909090909
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.6061884166666667
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.531767
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.47033714285714284
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.37576912500000004
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.3072766111111111
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.25608569999999997
+50.05
+[100]
+---------------------O-----------------
+Longitudinal straggling at 50.05um: dx = [1.67]
+Correspondent kinEn for range of [1.67] um: E = [1.1875] MeV
+is interpolation necessary: True
+nearest point: 1.68 um
+range interpolation: [1.1 1.2] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 16.60159
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 7.9395
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 5.023526666666666
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 3.5890250000000004
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 2.7386579999999996
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 2.1785599999999996
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 1.7828480000000002
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 1.473605875
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 1.7828480000000002
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 1.0687283
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 0.9269727272727273
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 0.8121006666666667
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.7174451538461539
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.6386016428571428
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.5155513125
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.4250747777777778
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.35664795
+50.04
+[102]
+---------------------F-----------------
+Longitudinal straggling at 50.04um: dx = [1.6]
+Correspondent kinEn for range of [1.6] um: E = 1.2 MeV
+is interpolation necessary: False
+nearest point: 1.6 um
+range interpolation: [1.1 1.2] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 19.3248
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 9.39611
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 5.953339999999999
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 4.285880000000001
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 3.311886
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 2.6744350000000003
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 2.2249342857142858
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 1.89162
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 2.2249342857142858
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 1.404067
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 1.2336203636363638
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 1.09325875
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 0.9760376923076923
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 0.8762825714285714
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.7185673124999999
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.5997989444444444
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.50779075
+50.0
+[103]
+---------------------Ne-----------------
+Longitudinal straggling at 50.0um: dx = [1.69]
+Correspondent kinEn for range of [1.69] um: E = [1.3125] MeV
+is interpolation necessary: True
+nearest point: 1.68 um
+range interpolation: [1.3 1.4] MeV
+Fraction of initial kinetic energy loss for: 
+
+5 Mev ----> 19.104680000000002
+Fraction of initial kinetic energy loss for: 
+
+10 Mev ----> 10.2718
+Fraction of initial kinetic energy loss for: 
+
+15 Mev ----> 6.899393333333334
+Fraction of initial kinetic energy loss for: 
+
+20 Mev ----> 5.1124825000000005
+Fraction of initial kinetic energy loss for: 
+
+25 Mev ----> 4.00495
+Fraction of initial kinetic energy loss for: 
+
+30 Mev ----> 3.253528333333333
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 2.7126485714285713
+Fraction of initial kinetic energy loss for: 
+
+40 Mev ----> 2.305815
+Fraction of initial kinetic energy loss for: 
+
+35 Mev ----> 2.7126485714285713
+Fraction of initial kinetic energy loss for: 
+
+50 Mev ----> 1.715362
+Fraction of initial kinetic energy loss for: 
+
+55 Mev ----> 1.5056854545454543
+Fraction of initial kinetic energy loss for: 
+
+60 Mev ----> 1.3334683333333335
+Fraction of initial kinetic energy loss for: 
+
+65 Mev ----> 1.1908338461538461
+Fraction of initial kinetic energy loss for: 
+
+70 Mev ----> 1.0700114285714286
+Fraction of initial kinetic energy loss for: 
+
+80 Mev ----> 0.8780649375000001
+Fraction of initial kinetic energy loss for: 
+
+90 Mev ----> 0.7343417777777778
+Fraction of initial kinetic energy loss for: 
+
+100 Mev ----> 0.62387155
