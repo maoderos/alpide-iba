@@ -1,0 +1,12 @@
+---------------alpide-----------------------
+Thickness = 50.0
+50.07
+[62]
+---------------------H-----------------
+Longitudinal straggling at 50.07um and [2.07]: dx = [2.08]
+Correspondent kinEn for range_data of [2.08] um: E = [0.22232143] MeV
+is interpolation necessary: True
+nearest point: 2.11 um
+range_data interpolation: [0.2   0.225] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE

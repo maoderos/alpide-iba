@@ -10,15 +10,40 @@ import scipy.integrate as integrate
 
 
 
+
 #--------Initial values----------
 
 elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
-#elements = ["B"]
-initial_energy = [5,10,15,20,25,30,35,40,35,50,55,60,65,70,80,90,100] # MeV
+initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,70.0,80.0,90.0,100.0] # MeV
 radical = "alpide.txt"
 thickness = 50.0 #in um
-EnergyLossTable = False
+EnergyLossTable = True
 
+
+def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
+    energy_pos, = np.where(kinEn == energy)
+   # print(range_data[energy_pos[0]])
+    diff = range_data[energy_pos[0]] - thickness
+    if(diff >= range_data[0]):
+
+        interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
+
+        '''
+        plt.plot(range_data[:energy_pos[0]+1], interp_function(range_data[:energy_pos[0] + 1]),label='cubic interpol')
+        plt.plot(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0]+1],'o',label="SRIM-2013")
+        plt.legend()
+        plt.show()
+        '''
+        #Now we use the interpolation function to integrate between the points
+
+        energyLoss = integrate.quad(interp_function,diff,range_data[energy_pos[0]])
+        return (energyLoss[0]*1e-03)/energy
+    elif (diff < range_data[0] and diff >= 0):
+        interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
+        energyLoss = integrate.quad(interp_function,range_data[0],range_data[energy_pos[0]])
+        return (energyLoss[0]*1e-03)/energy
+    else:
+        return 0
 
 def find_nearest(array, value):
     array = np.asarray(array)
@@ -78,69 +103,71 @@ for element in elements: #Loop in all files of folder
     filename = "{0}_{1}".format(element, radical)
     data_arr = format_file(filename,element)
     dE_dx = np.add(data_arr[:,1],data_arr[:,2]) # Get sum of colluns 1 e 2 (of dE/dx)
-    range = data_arr[:,3] #Get range collumn
+    range_data = data_arr[:,3] #Get range collumn
     long_strag = data_arr[:,4] #Get longitudinal straggling
     kinEn = data_arr[:,0] # Get kinetic energy(initial) 
   
     #-------- interpolation -------------
 
 
-    # fist, we need to find the position of range 15 
-    value_near = find_nearest(range, thickness)
+    # fist, we need to find the position of range_data 15 
+    value_near = find_nearest(range_data, thickness)
     print(value_near)
-    pos, = np.where(range == value_near)
+    pos, = np.where(range_data == value_near)
 
-    # Now we find the nearest point of range in tables giving the longitudinal
+    # Now we find the nearest point of range_data in tables giving the longitudinal
     # straggling 
     print(pos)
-    near_point = find_nearest(range, long_strag[pos])
+    near_point = find_nearest(range_data, long_strag[pos])
 
     need_interpol = True
-    near_p_idx, = np.where(range == near_point)
+    near_p_idx, = np.where(range_data == near_point)
     if near_point > long_strag[pos]:
-        range_interp = range[near_p_idx[0]-1:near_p_idx[0] + 1]
+        range_data_interp = range_data[near_p_idx[0]-1:near_p_idx[0] + 1]
         kinEn_interp = kinEn[near_p_idx[0]-1:near_p_idx[0] + 1]
-        range_graph = range[near_p_idx[0]-3:near_p_idx[0] + 4]
+        range_data_graph = range_data[near_p_idx[0]-3:near_p_idx[0] + 4]
         kinEn_graph = kinEn[near_p_idx[0]-3:near_p_idx[0] + 4]
     elif near_point < long_strag[pos]:
-        range_interp = range[near_p_idx[0]:near_p_idx[0] + 2]
+        range_data_interp = range_data[near_p_idx[0]:near_p_idx[0] + 2]
         kinEn_interp = kinEn[near_p_idx[0]:near_p_idx[0] + 2]
-        range_graph = range[near_p_idx[0]-2:near_p_idx[0] + 4]
+        range_data_graph = range_data[near_p_idx[0]-2:near_p_idx[0] + 4]
         kinEn_graph = kinEn[near_p_idx[0]-2:near_p_idx[0] + 4]
     elif near_point == long_strag[pos]:
         need_interpol = False
-        energy_straggling_index, = np.where(range == long_strag[pos])
+        energy_straggling_index, = np.where(range_data == long_strag[pos])
         energy_straggling = kinEn[energy_straggling_index[0]]
     
     # if the nearest point doesnt appear in table, intepolate to estimate kinEn
 
     if (need_interpol):
-        interp_function = interpolate.interp1d(range_interp, kinEn_interp, kind='linear')
+        interp_function = interpolate.interp1d(range_data_interp, kinEn_interp, kind='linear')
         energy_straggling = interp_function(long_strag[pos])
 
     #Fraction of energy loss given the initial energy
 
+    
 
     print('---------------------{0}-----------------'.format(element))
     print('Longitudinal straggling at {0}um and {2}: dx = {1}'.format(value_near,long_strag[pos],kinEn[pos]))
-    print('Correspondent kinEn for range of {0} um: E = {1} MeV'.format(long_strag[pos],energy_straggling))
+    print('Correspondent kinEn for range_data of {0} um: E = {1} MeV'.format(long_strag[pos],energy_straggling))
     print('is interpolation necessary: {0}'.format(need_interpol))
     print("nearest point: {0} um".format(near_point))
-    print('range interpolation: {0} MeV'.format(kinEn_interp))
+    print('range_data interpolation: {0} MeV'.format(kinEn_interp))
+
     if(EnergyLossTable):
+        print("------------------------------------------------------------------------")
+        print("Fraction of energy loss due to the ALPIDE")
         for i in initial_energy:
-            en_idx, = np.where(kinEn==i)
-            energy_loss = (dE_dx[en_idx[0]]*thickness)*(1e-03) #to MeV
-            fraction_loss = energy_loss/kinEn[en_idx[0]]
-            print("Fraction of initial kinetic energy loss for: \n")
-            print("{0} Mev ----> {1}".format(i,fraction_loss) )
-
-
-    #plt.xlabel("range($\mu$m)")
-    #plt.ylabel("Kinetic Energy (MeV)")
-    #plt.plot(range_graph,kinEn_graph, 'o',label="SRIM-2013")
-    #plt.plot(range_interp,interp_function(range_interp),'-',label='linear interpolation')
-    #plt.plot(long_strag[pos_15], energy_straggling, 'o', color='r', label='KinEn = {0}; range = {1}'.format(energy_straggling,long_strag[pos_15]))
-    #plt.title("Hydrogen")
-    #plt.legend()
-    #plt.show()
+            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i)
+            print("{0} MeV --------------------- {1}".format( i,fracEn))
+        print("------------------------------------------------------------------------")
+    '''
+    plt.xlabel("range_data($\mu$m)")
+    plt.ylabel("Kinetic Energy (MeV)")
+    plt.plot(range_data_graph,kinEn_graph, 'o',label="SRIM-2013")
+    plt.plot(range_data_interp,interp_function(range_interp),'-',label='linear interpolation')
+    plt.plot(long_strag[pos], energy_straggling, 'o', color='r', label='KinEn = {0}; range_data = {1}'.format(energy_straggling,long_strag[pos]))
+    plt.title("Hydrogen")
+    plt.legend()
+    plt.show()
+    '''   

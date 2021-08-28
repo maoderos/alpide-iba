@@ -1,0 +1,122 @@
+---------------alpide-----------------------
+Thickness = 50.0
+50.07
+[62]
+---------------------H-----------------
+Longitudinal straggling at 50.07um and [2.07]: dx = [2.08]
+Correspondent kinEn for range_data of [2.08] um: E = [0.22232143] MeV
+is interpolation necessary: True
+nearest point: 2.11 um
+range_data interpolation: [0.2   0.225] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.0016650802551764511
+------------------------------------------------------------------------
+50.01
+[77]
+---------------------He-----------------
+Longitudinal straggling at 50.01um and [8.12]: dx = [2.02]
+Correspondent kinEn for range_data of [2.02] um: E = [0.51] MeV
+is interpolation necessary: True
+nearest point: 1.99 um
+range_data interpolation: [0.5  0.55] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.019859539374233823
+------------------------------------------------------------------------
+50.01
+[85]
+---------------------Li-----------------
+Longitudinal straggling at 50.01um and [16.17]: dx = [1.74]
+Correspondent kinEn for range_data of [1.74] um: E = [0.49583333] MeV
+is interpolation necessary: True
+nearest point: 1.75 um
+range_data interpolation: [0.45 0.5 ] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.07085065717130443
+------------------------------------------------------------------------
+50.01
+[89]
+---------------------Be-----------------
+Longitudinal straggling at 50.01um and [24.5]: dx = [1.79]
+Correspondent kinEn for range_data of [1.79] um: E = [0.6625] MeV
+is interpolation necessary: True
+nearest point: 1.77 um
+range_data interpolation: [0.65 0.7 ] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.16488606122903246
+------------------------------------------------------------------------
+50.06
+[93]
+---------------------B-----------------
+Longitudinal straggling at 50.06um and [33.8]: dx = [1.7]
+Correspondent kinEn for range_data of [1.7] um: E = [0.93636364] MeV
+is interpolation necessary: True
+nearest point: 1.66 um
+range_data interpolation: [0.9 1. ] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.3132357864177305
+------------------------------------------------------------------------
+50.0
+[96]
+---------------------C-----------------
+Longitudinal straggling at 50.0um and [42.31]: dx = [1.61]
+Correspondent kinEn for range_data of [1.61] um: E = [1.02222222] MeV
+is interpolation necessary: True
+nearest point: 1.59 um
+range_data interpolation: [1.  1.1] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.5005571860614116
+------------------------------------------------------------------------
+50.0
+[98]
+---------------------N-----------------
+Longitudinal straggling at 50.0um and [53.04]: dx = [1.7]
+Correspondent kinEn for range_data of [1.7] um: E = [1.26666667] MeV
+is interpolation necessary: True
+nearest point: 1.73 um
+range_data interpolation: [1.2 1.3] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0.8084115916069774
+------------------------------------------------------------------------
+50.0
+[100]
+---------------------O-----------------
+Longitudinal straggling at 50.0um and [62.75]: dx = [1.67]
+Correspondent kinEn for range_data of [1.67] um: E = [1.2125] MeV
+is interpolation necessary: True
+nearest point: 1.66 um
+range_data interpolation: [1.2 1.3] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0
+------------------------------------------------------------------------
+50.0
+[102]
+---------------------F-----------------
+Longitudinal straggling at 50.0um and [75.02]: dx = [1.61]
+Correspondent kinEn for range_data of [1.61] um: E = [1.25] MeV
+is interpolation necessary: True
+nearest point: 1.65 um
+range_data interpolation: [1.2 1.3] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0
+------------------------------------------------------------------------
+50.0
+[103]
+---------------------Ne-----------------
+Longitudinal straggling at 50.0um and [85.88]: dx = [1.7]
+Correspondent kinEn for range_data of [1.7] um: E = [1.35714286] MeV
+is interpolation necessary: True
+nearest point: 1.73 um
+range_data interpolation: [1.3 1.4] MeV
+------------------------------------------------------------------------
+Fraction of energy loss due to the ALPIDE
+60.0 MeV --------------------- 0
+------------------------------------------------------------------------
