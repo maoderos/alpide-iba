@@ -14,10 +14,12 @@ import scipy.integrate as integrate
 #--------Initial values----------
 
 elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
-initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,70.0,80.0,90.0,100.0] # MeV
+initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0] # MeV
 radical = "alpide.txt"
 thickness = 50.0 #in um
 EnergyLossTable = True
+#elements=["He"]
+#initial_energy=[10.0]
 
 
 def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
@@ -25,23 +27,55 @@ def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
    # print(range_data[energy_pos[0]])
     diff = range_data[energy_pos[0]] - thickness
     if(diff >= range_data[0]):
+        '''
 
         interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
 
-        '''
+        
         plt.plot(range_data[:energy_pos[0]+1], interp_function(range_data[:energy_pos[0] + 1]),label='cubic interpol')
         plt.plot(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0]+1],'o',label="SRIM-2013")
+        plt.xlabel("range($\mu$m)")
+        plt.ylabel("dE/dx(MeV)")
         plt.legend()
         plt.show()
         '''
+
         #Now we use the interpolation function to integrate between the points
 
-        energyLoss = integrate.quad(interp_function,diff,range_data[energy_pos[0]])
-        return (energyLoss[0]*1e-03)/energy
+        interp_function = interpolate.interp1d(kinEn[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
+        '''
+        plt.title("He")
+        plt.plot(kinEn[:energy_pos[0]+1], interp_function(kinEn[:energy_pos[0] + 1]),label='cubic interpol')
+        plt.plot(kinEn[:energy_pos[0] + 1], de_dx[:energy_pos[0]+1],'o',label="SRIM-2013")
+        plt.xlabel("Kinetic Energy(MeV)")
+        plt.ylabel("dE/dx(MeV)")
+        plt.yscale('log')
+        plt.xscale('log')
+        plt.legend()
+        plt.show()
+        '''
+        init=0.0
+        step=0.5
+        E = energy
+        E_final = 0
+        while(init < thickness):
+           
+            E_loss = interp_function(E)*step*(1e-03)
+            E_final += E_loss
+            E -= E_loss
+
+            init+=step
+
+        
+        #energyLoss = integrate.quad(interp_function,diff,range_data[energy_pos[0]])
+        #return (energyLoss[0]*1e-03)/energy
+        return((E_final)/energy)
     elif (diff < range_data[0] and diff >= 0):
+        '''
         interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
         energyLoss = integrate.quad(interp_function,range_data[0],range_data[energy_pos[0]])
         return (energyLoss[0]*1e-03)/energy
+        '''
     else:
         return 0
 
@@ -159,7 +193,7 @@ for element in elements: #Loop in all files of folder
         print("Fraction of energy loss due to the ALPIDE")
         for i in initial_energy:
             fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i)
-            print("{0} MeV --------------------- {1}".format( i,fracEn))
+            print("{0} MeV --------------------- {1:.1f}".format( i,fracEn*100))
         print("------------------------------------------------------------------------")
     '''
     plt.xlabel("range_data($\mu$m)")
