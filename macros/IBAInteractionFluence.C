@@ -22,6 +22,7 @@
 using o2::MCTrackT;
 
 bool DEBUG_VERBOSE = false;
+double e = 1.602E-19;
 
 //
 // $ root.exe -q IBAclusterStats.C+
@@ -55,12 +56,15 @@ void IBAInteractionFluence(int preciousSensorID = 24){
   auto mg1 = new TMultiGraph();
   mg1->SetTitle(";Interaction Rate (Ev/s);Efficiency");
   auto mg2 = new TMultiGraph();
-  mg2->SetTitle(";Fluence (protons/s.cm²);Efficiency");
-
+  mg2->SetTitle(";Fluence (protons/s.cm2);Efficiency");
+  auto mg3 = new TMultiGraph();
+  mg3->SetTitle(";A/cm2; Efficiency");
+  
   for (int j = 0; j < protonsEvent.size(); j++){
     std::vector<double> efficiency;
     std::vector<double> d_intRate;
     std::vector<double> fluence;
+    std::vector<double> ampere_cm;
         
   	for(int i = 0; i < intRate.size(); i++){
       	// Files & Trees
@@ -90,6 +94,7 @@ void IBAInteractionFluence(int preciousSensorID = 24){
         d_intRate.push_back(1.0*intRate[i]);
 
         fluence.push_back(1.0*protonsEvent[j]*intRate[i]/beamArea);
+	ampere_cm.push_back(1.0*protonsEvent[j]*intRate[i]*e/beamArea);
     }
   
     // First graph is in function of interation Rate
@@ -115,6 +120,14 @@ void IBAInteractionFluence(int preciousSensorID = 24){
 
     mg2->Add(gr2);
 
+    TGraph *gr3 = new TGraph(ampere_cm.size(), &ampere_cm[0], &efficiency[0]);
+
+    gr3->SetTitle(name1.str().c_str());
+    gr3->SetMarkerStyle(3);
+    gr3->SetMarkerColor(j+5);
+    gr3->SetLineColor(j+5);
+
+    mg3->Add(gr3);
   }
 
   TCanvas* c1 = new TCanvas();
@@ -129,5 +142,12 @@ void IBAInteractionFluence(int preciousSensorID = 24){
   c2->BuildLegend();
   c2->SaveAs("fluencePlot.pdf");
 
+  TCanvas* c3 = new TCanvas();
+  c3->cd();
+  mg3->Draw("AP");
+  c3->BuildLegend();
+  c3->SaveAs("amperePlot.pdf");
+
+  
 
 }
