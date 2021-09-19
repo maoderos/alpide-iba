@@ -1,4 +1,8 @@
-# ALPIDE sensor for IBA
+# ALPIDE sensor for Low Energy Ions 
+
+Studies on ALPIDE sensor performance at low energies regime and its potecial for Ion Beam Analysis.
+
+
 
 * `macro/IBAclusterStats.C`: Some statistics on clusters production
   * `$ root.exe -q IBAclusterStats.C`
