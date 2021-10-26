@@ -2,15 +2,17 @@
 
 Studies on ALPIDE sensor performance at low energies regime and its potecial for Ion Beam Analysis.
 
-
-
-* `macro/IBAclusterStats.C`: Some statistics on clusters production
-  * `$ root.exe -q IBAclusterStats.C`
-* `macro/IBAInteractionRate.C`: Analysis of valid clusters as function of the interaction Rate.
-  * `$ root.exe -q IBAInteractionRate.C`
+* `macros/IBAclusterStats.C`: Some statistics on clusters production, hits and ROFs
+  * `$ root.exe -q -l IBAclusterStats.C`
+* `macros/IBAInteractionRate.C`: Analysis of valid clusters as function of the interaction Rate.
+  * `$ root.exe -q -l IBAInteractionRate.C`
+* `macros/IBAInteractionFluence.C`:  Efficiency analysis in terms of fluence.
+  * `$ root.exe -q -l IBAInteractionFluence.C`
+* `macros/analysisEff.C`: Fit efficiency in energy threshold region with a gaussian CDF.
 * `scripts/Generate_single_proton_events.sh`: Generate proton events for each interaction rate provided.
 * `scripts/plot_eff.sh`: Plot efficiency as function of interaction rate using the macro "IBAInteractionRate.C".
 * `o2-files/`: Files from o2 simulation that were modified. 
+* `SRIM_analys/`: SRIM simulation data and codes to analyze its data. In `SRIM_analysis.py` we have the estimation of energy straggling from a longitudinal straggling and the fraction of energy loss crossing the ALPIDE.
 
 ## Simulation Instructions
 
@@ -21,7 +23,7 @@ To simulate and analyze its data with "IBAclusterStats.C":
 
 Where `-n` is the number of events and `-i` are the interaction rates that you want to make the simulation. For each interaction rate, one folder with the corresponding number will be created. 
 
-OBS:In order to decrease the time of simulation, the command above has the following strategy: If the number of events is less than 2000 or odd, the script will make just 1 simulation with the number provided. Otherwise, if the number of events is bigger than 2000 and even, (n/2000) simulations will be made. That's because we observed that as the number of events increase, slower is the simulation. 
+OBS:In order to decrease the time of simulation, the command above has the following strategy: If the number of events is less than 2000 or odd, the script will make just 1 simulation with the number provided. Otherwise, if the number of events is bigger than 2000 and even, (n/2000) simulations will be made. 
 
 For generating the plot of efficiency (nClusterFromPrimaries/nPrimaries), you need to specify which interaction rates do you want to use to make the plot:
 
