@@ -23,6 +23,7 @@ using o2::MCTrackT;
 
 bool DEBUG_VERBOSE = false;
 double e = 1.602E-19;
+double a_3x3 = 9*(29.24e-4*26.88e-4);
 
 //
 // $ root.exe -q IBAclusterStats.C+
@@ -48,11 +49,13 @@ std::vector<int> GetIRlist(std::string filename){
 void IBAInteractionFluence(int preciousSensorID = 24){
 
   std::string IR_file = "ir_list.txt";
-  std::vector<int>intRate = {1000,50000,100000,200000};
-
+  //std::vector<int>intRate ={1000,50000,100000,150000,200000,300000,400000,500000,700000,1000000,3000000,5000000,10000000,15000000,45000000};
+  //std::vector<int>intRate ={1000,50000,100000,150000,200000,300000,400000,500000,700000, };
+  std::vector<int>intRate ={500000,1000000,5000000,10000000,15000000,20000000};
   //Loop through all interaction rates
-  std::vector<int> protonsEvent = {100,200,300,400,500};
-  float beamArea = 1.327; // in cm2
+  //std::vector<int> protonsEvent = {100,200,300,400,500};
+  std::vector<int> protonsEvent = {100,200,300};
+  float beamArea = 0.5; // in cm2
   auto mg1 = new TMultiGraph();
   mg1->SetTitle(";Interaction Rate (Ev/s);Efficiency");
   auto mg2 = new TMultiGraph();
@@ -95,6 +98,12 @@ void IBAInteractionFluence(int preciousSensorID = 24){
 
         fluence.push_back(1.0*protonsEvent[j]*intRate[i]/beamArea);
 	ampere_cm.push_back(1.0*protonsEvent[j]*intRate[i]*e/beamArea);
+	
+	auto data_name = Form("%d.dat",protonsEvent[j]);
+	std::ofstream data(data_name, std::ios_base::app);
+	data << 1.0*nClustersFromPrimaries_val/nPrimaries_val << " " << 1.0*intRate[i] << '\n';
+	data.close();
+	
     }
   
     // First graph is in function of interation Rate
@@ -117,7 +126,8 @@ void IBAInteractionFluence(int preciousSensorID = 24){
     gr2->SetMarkerColor(j+5);
   
     gr2->SetLineColor(j+5);
-
+    
+    
     mg2->Add(gr2);
 
     TGraph *gr3 = new TGraph(ampere_cm.size(), &ampere_cm[0], &efficiency[0]);
@@ -129,17 +139,52 @@ void IBAInteractionFluence(int preciousSensorID = 24){
 
     mg3->Add(gr3);
   }
-
+  
+ 
+ // TF1 *efficiency_th = new TF1("2x2 pixel clustering","0.997*(1 - (TMath::PoissonI(0,(4*(29.24e-4*26.88e-4))*x*9.8805107e-06)))/(x*9.8805107e-06*(4*(29.24e-4*26.88e-4)))",0,12e9);
+ // efficiency_th->SetTitle("Efficiency of 2x2 pixel clustering from Poisson distribution");
+ // efficiency_th->SetLineColor(1);
+  
+  
   TCanvas* c1 = new TCanvas();
   c1->cd();
   mg1->Draw("AP");
-  c1->BuildLegend();
   c1->SaveAs("interactionRatePlot.pdf");
+  
+  auto fitRes = mg2->Fit("expo","S");
+  auto errors = fitRes->Errors();
+  auto parameters = fitRes->Parameters();
+  
+  std::ostringstream equation;
+ equation << "fit function: exp(Ax + B)";
 
+
+ std::ostringstream a;
+ a << "A = " << parameters[1] << " #pm " << errors[1];
+
+  
+ std::ostringstream b;
+ b << "B = " << parameters[0] << " #pm " << errors[0];
+  
+  auto legend = new TLegend(0.9,0.9,0.9,0.9);
+  //legend->AddEntry(efficiency_th,"Eff. of 2x2 pixel clustering from Poisson distribution");
+  legend->AddEntry((TObject*)0,equation.str().c_str(), "");
+  legend->AddEntry((TObject*)0,a.str().c_str(), "");
+  legend->AddEntry((TObject*)0,b.str().c_str(), "");
+ 
+  //gStyle->SetOptFit(0001);
+  
   TCanvas* c2 = new TCanvas();
   c2->cd();
   mg2->Draw("AP");
-  c2->BuildLegend();
+  //efficiency_th->Draw("SAME");
+  //mg2->Fit("expo");
+  c2->BuildLegend(0.2,0.15,0.2,0.15, "Simulation data");
+  legend->Draw();
+  
+  
+ // TF1 * fitFunc = mg2->GetFunction("f1");
+  
   c2->SaveAs("fluencePlot.pdf");
 
   TCanvas* c3 = new TCanvas();

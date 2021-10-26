@@ -40,7 +40,7 @@ def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
         plt.show()
         '''
 
-        #Now we use the interpolation function to integrate between the points
+        #Now interpolate the data of dE/dx vs k
 
         interp_function = interpolate.interp1d(kinEn[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
         '''
@@ -67,15 +67,7 @@ def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
             init+=step
 
         
-        #energyLoss = integrate.quad(interp_function,diff,range_data[energy_pos[0]])
-        #return (energyLoss[0]*1e-03)/energy
         return((E_final)/energy)
-    elif (diff < range_data[0] and diff >= 0):
-        '''
-        interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
-        energyLoss = integrate.quad(interp_function,range_data[0],range_data[energy_pos[0]])
-        return (energyLoss[0]*1e-03)/energy
-        '''
     else:
         return 0
 
@@ -99,7 +91,7 @@ def line_filter(line):
     return line_final
 
 
-def get_thick_line(filename,value): # get line with data from 50um from SRIM table
+def get_thick_line(filename,value): # get line with data of thickness from SRIM table
     file = open("specialValues/{0}".format(filename), "r") 
     value_find = str(value)
     for line in file:
@@ -114,7 +106,7 @@ def format_file(filename,element): # Format SRIM tables and return lists
     for i, line in enumerate(file):
         if i in np.arange(25, 130): 
             lines_data.append(line_filter(line)) 
-    # After getting a list of lines of data, get the line of 15um, add it to list and sort it.
+    # After getting a list of lines of data, get the line of thickness, add it to list and sort it.
     line_special = get_thick_line(filename,thickness)
     repeated_line = False
     for j in lines_data:
@@ -144,12 +136,12 @@ for element in elements: #Loop in all files of folder
     #-------- interpolation -------------
 
 
-    # fist, we need to find the position of range_data 15 
+    # fist, we need to find the position of range_data thickness
     value_near = find_nearest(range_data, thickness)
     print(value_near)
     pos, = np.where(range_data == value_near)
 
-    # Now we find the nearest point of range_data in tables giving the longitudinal
+    # Now we find the nearest point of range_data in tables given the longitudinal
     # straggling 
     print(pos)
     near_point = find_nearest(range_data, long_strag[pos])
