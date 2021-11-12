@@ -71,6 +71,7 @@ def format_file(filename,element): # Format SRIM tables and return lists
 print("---------------" + radical[:-4] + "-----------------------")
 print("Thickness =", thickness)
 
+element_z = 1 #starting at H 
 for element in elements: #Loop in all files of folder
     filename = "{0}_{1}".format(element, radical)
     data_arr = format_file(filename,element)
@@ -96,9 +97,11 @@ for element in elements: #Loop in all files of folder
         print("------------------------------------------------------------------------")
         print("Fraction of energy loss due to the ALPIDE")
         for i in initial_energy:
-            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness)
+            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thicknessi)
+            theta_scat = getMultipleScatt(i,fracEn,element_mass,element_z,thickness)
             print("{0} MeV --------------------- {1:.1f}".format(i,fracEn*100))
         print("------------------------------------------------------------------------")
+    element_z += 1
     '''
     plt.xlabel("range_data($\mu$m)")
     plt.ylabel("Kinetic Energy (MeV)")
