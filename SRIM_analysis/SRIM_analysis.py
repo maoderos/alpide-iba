@@ -7,20 +7,26 @@ import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
 from energyLoss import *
 from energyStragg import *
-
+from multipleScatt import *
 
 
 
 #--------Initial values----------
 
-elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+#elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+element_mass = [1.0079, 4.0026, 6.941, 9.0122, 10.811, 12.0107, 14.0067, 15.9994, 18.9984]
+mev_c = 931.4940
+element_mass = [x*mev_c for x in element_mass] # conversion of atomic mass in MeV/c^2
+elements = ["H"]
 initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0] # MeV
 radical = "alpide.txt"
-thickness = 50.0 #in um
 EnergyLossTable = True
-#elements=["He"]
-#initial_energy=[10.0]
 
+#----ALPIDE parameters and materials
+thickness = 50.0 #in um
+density = 2.313 # g/cm3
+radiation_length = [21.82, 24.01, 34.24] # Si,Al,O
+weigth =  [0.8776, 0.034, 0.0884] # Si, Al, O
 
 def line_filter(line):
     line1 = line.replace(" keV", "E-03")
@@ -96,10 +102,12 @@ for element in elements: #Loop in all files of folder
     if(EnergyLossTable):
         print("------------------------------------------------------------------------")
         print("Fraction of energy loss due to the ALPIDE")
+
+        print("Initial Energy ------------------ FracEnLoss -------------------- Scatt Angle")
         for i in initial_energy:
-            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thicknessi)
-            theta_scat = getMultipleScatt(i,fracEn,element_mass,element_z,thickness)
-            print("{0} MeV --------------------- {1:.1f}".format(i,fracEn*100))
+            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness)
+            theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],element_z,thickness, radiation_length, weigth, density)
+            print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}".format(i,fracEn*100, theta_scat))
         print("------------------------------------------------------------------------")
     element_z += 1
     '''
