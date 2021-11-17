@@ -1,4 +1,3 @@
-
 import os
 import sys
 import re
@@ -6,75 +5,28 @@ import numpy as np
 from io import StringIO 
 import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
-import scipy.integrate as integrate
-
+from energyLoss import *
+from energyStragg import *
+from multipleScatt import *
 
 
 
 #--------Initial values----------
 
 elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+element_mass = [1.0079, 4.0026, 6.941, 9.0122, 10.811, 12.0107, 14.0067, 15.9994, 18.9984, 20.1797]
+mev_c = 931.4940
+element_mass = [x*mev_c for x in element_mass] # conversion of atomic mass in MeV/c^2
+#elements = ["H"]
 initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0] # MeV
 radical = "alpide.txt"
-thickness = 50.0 #in um
 EnergyLossTable = True
-#elements=["He"]
-#initial_energy=[10.0]
 
-
-def calculate_energyLossFraction(de_dx,range_data,kinEn,energy):
-    energy_pos, = np.where(kinEn == energy)
-   # print(range_data[energy_pos[0]])
-    diff = range_data[energy_pos[0]] - thickness
-    if(diff >= range_data[0]):
-        '''
-
-        interp_function = interpolate.interp1d(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
-
-        
-        plt.plot(range_data[:energy_pos[0]+1], interp_function(range_data[:energy_pos[0] + 1]),label='cubic interpol')
-        plt.plot(range_data[:energy_pos[0] + 1], de_dx[:energy_pos[0]+1],'o',label="SRIM-2013")
-        plt.xlabel("range($\mu$m)")
-        plt.ylabel("dE/dx(MeV)")
-        plt.legend()
-        plt.show()
-        '''
-
-        #Now interpolate the data of dE/dx vs k
-
-        interp_function = interpolate.interp1d(kinEn[:energy_pos[0] + 1], de_dx[:energy_pos[0] + 1], kind='cubic')
-        '''
-        plt.title("He")
-        plt.plot(kinEn[:energy_pos[0]+1], interp_function(kinEn[:energy_pos[0] + 1]),label='cubic interpol')
-        plt.plot(kinEn[:energy_pos[0] + 1], de_dx[:energy_pos[0]+1],'o',label="SRIM-2013")
-        plt.xlabel("Kinetic Energy(MeV)")
-        plt.ylabel("dE/dx(MeV)")
-        plt.yscale('log')
-        plt.xscale('log')
-        plt.legend()
-        plt.show()
-        '''
-        init=0.0
-        step=0.5
-        E = energy
-        E_final = 0
-        while(init < thickness):
-           
-            E_loss = interp_function(E)*step*(1e-03)
-            E_final += E_loss
-            E -= E_loss
-
-            init+=step
-
-        
-        return((E_final)/energy)
-    else:
-        return 0
-
-def find_nearest(array, value):
-    array = np.asarray(array)
-    idx = (np.abs(array - value)).argmin()
-    return array[idx]
+#----ALPIDE parameters and materials
+thickness = 50.0 #in um
+density = 2.313 # g/cm3
+radiation_length = [21.82, 24.01, 34.24] # Si,Al,O
+weigth =  [0.8776, 0.034, 0.0884] # Si, Al, O
 
 def line_filter(line):
     line1 = line.replace(" keV", "E-03")
@@ -125,6 +77,7 @@ def format_file(filename,element): # Format SRIM tables and return lists
 print("---------------" + radical[:-4] + "-----------------------")
 print("Thickness =", thickness)
 
+element_z = 1 #starting at H 
 for element in elements: #Loop in all files of folder
     filename = "{0}_{1}".format(element, radical)
     data_arr = format_file(filename,element)
@@ -133,43 +86,9 @@ for element in elements: #Loop in all files of folder
     long_strag = data_arr[:,4] #Get longitudinal straggling
     kinEn = data_arr[:,0] # Get kinetic energy(initial) 
   
-    #-------- interpolation -------------
-
-
-    # fist, we need to find the position of range_data thickness
-    value_near = find_nearest(range_data, thickness)
-    print(value_near)
-    pos, = np.where(range_data == value_near)
-
-    # Now we find the nearest point of range_data in tables given the longitudinal
-    # straggling 
-    print(pos)
-    near_point = find_nearest(range_data, long_strag[pos])
-
-    need_interpol = True
-    near_p_idx, = np.where(range_data == near_point)
-    if near_point > long_strag[pos]:
-        range_data_interp = range_data[near_p_idx[0]-1:near_p_idx[0] + 1]
-        kinEn_interp = kinEn[near_p_idx[0]-1:near_p_idx[0] + 1]
-        range_data_graph = range_data[near_p_idx[0]-3:near_p_idx[0] + 4]
-        kinEn_graph = kinEn[near_p_idx[0]-3:near_p_idx[0] + 4]
-    elif near_point < long_strag[pos]:
-        range_data_interp = range_data[near_p_idx[0]:near_p_idx[0] + 2]
-        kinEn_interp = kinEn[near_p_idx[0]:near_p_idx[0] + 2]
-        range_data_graph = range_data[near_p_idx[0]-2:near_p_idx[0] + 4]
-        kinEn_graph = kinEn[near_p_idx[0]-2:near_p_idx[0] + 4]
-    elif near_point == long_strag[pos]:
-        need_interpol = False
-        energy_straggling_index, = np.where(range_data == long_strag[pos])
-        energy_straggling = kinEn[energy_straggling_index[0]]
+    #-------- Getting energy Straggling ------------
     
-    # if the nearest point doesnt appear in table, intepolate to estimate kinEn
-
-    if (need_interpol):
-        interp_function = interpolate.interp1d(range_data_interp, kinEn_interp, kind='linear')
-        energy_straggling = interp_function(long_strag[pos])
-
-    #Fraction of energy loss given the initial energy
+    energy_straggling, pos, need_interpol, near_point, value_near = getEnergyStraggling(thickness, range_data, long_strag, kinEn)
 
     
 
@@ -178,15 +97,22 @@ for element in elements: #Loop in all files of folder
     print('Correspondent kinEn for range_data of {0} um: E = {1} MeV'.format(long_strag[pos],energy_straggling))
     print('is interpolation necessary: {0}'.format(need_interpol))
     print("nearest point: {0} um".format(near_point))
-    print('range_data interpolation: {0} MeV'.format(kinEn_interp))
+   # print('range_data interpolation: {0} MeV'.format(kinEn_interp))
 
     if(EnergyLossTable):
         print("------------------------------------------------------------------------")
         print("Fraction of energy loss due to the ALPIDE")
+
+        print("Initial Energy ------------------ FracEnLoss -------------------- Scatt Angle")
         for i in initial_energy:
-            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i)
-            print("{0} MeV --------------------- {1:.1f}".format( i,fracEn*100))
+            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness)
+            if (fracEn != 0):
+                theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],element_z,thickness, radiation_length, weigth, density)
+            else:
+                theta_scat = 100000
+            print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}".format(i,fracEn*100, theta_scat))
         print("------------------------------------------------------------------------")
+    element_z += 1
     '''
     plt.xlabel("range_data($\mu$m)")
     plt.ylabel("Kinetic Energy (MeV)")
