@@ -34,7 +34,7 @@ def calculate_energyLossFraction(de_dx,range_data,kinEn,energy,thickness):
         plt.show()
         '''
         init=0.0
-        step=0.5
+        step=1.0
         E = energy
         E_final = 0
         while(init < thickness):

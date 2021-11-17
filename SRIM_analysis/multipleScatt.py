@@ -32,8 +32,11 @@ def getMultipleScatt(Ek_initial, loss_fraction,ion_mass,z,x, radiation_length, w
     beta = np.sqrt((xi**2 - 1)/(xi**2))
 
     Xo_mix = getRadiation_length(radiation_length, weigth, density)
+    #print("Radiation length = ", Xo_mix, " cm")
 
-    return (13.6/(beta*p))*z*np.sqrt((x*1e-4)/Xo_mix)*(1 + 0.038*np.log((x*z**2)/(Xo_mix*beta**2) ) )*57.2957
+    #print("x/Xo = ", (x*1e-4)/(Xo_mix))
+
+    return (13.6/(beta*p))*z*np.sqrt((x*1e-4)/Xo_mix)*(1 + 0.038*np.log((x*z**2)/(Xo_mix*beta**2) ) )*57.2957 # to change to degrees
     
 
 

@@ -13,11 +13,11 @@ from multipleScatt import *
 
 #--------Initial values----------
 
-#elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
-element_mass = [1.0079, 4.0026, 6.941, 9.0122, 10.811, 12.0107, 14.0067, 15.9994, 18.9984]
+elements = ["H", "He", "Li" ,"Be", "B", "C", "N", "O", "F", "Ne"]
+element_mass = [1.0079, 4.0026, 6.941, 9.0122, 10.811, 12.0107, 14.0067, 15.9994, 18.9984, 20.1797]
 mev_c = 931.4940
 element_mass = [x*mev_c for x in element_mass] # conversion of atomic mass in MeV/c^2
-elements = ["H"]
+#elements = ["H"]
 initial_energy = [4.0,8.0,10.0,15.0,20.0,30.0,40.0,50.0,60.0,70.0,80.0,90.0,100.0] # MeV
 radical = "alpide.txt"
 EnergyLossTable = True
@@ -106,7 +106,10 @@ for element in elements: #Loop in all files of folder
         print("Initial Energy ------------------ FracEnLoss -------------------- Scatt Angle")
         for i in initial_energy:
             fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness)
-            theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],element_z,thickness, radiation_length, weigth, density)
+            if (fracEn != 0):
+                theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],element_z,thickness, radiation_length, weigth, density)
+            else:
+                theta_scat = 100000
             print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}".format(i,fracEn*100, theta_scat))
         print("------------------------------------------------------------------------")
     element_z += 1
