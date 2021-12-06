@@ -5,7 +5,7 @@ import numpy as np
 from io import StringIO 
 import matplotlib.pyplot as plt
 import scipy.interpolate as interpolate
-from energyLoss import *
+from energyLoss_complexScatt import *
 from energyStragg import *
 from multipleScatt import *
 
@@ -103,16 +103,17 @@ for element in elements: #Loop in all files of folder
         print("------------------------------------------------------------------------")
         print("Fraction of energy loss due to the ALPIDE")
 
-        print("Initial Energy ------------------ FracEnLoss -------------------- Scatt Angle")
+        print("Initial Energy ------------------ FracEnLoss -------------------- Scatt_Angle1-------------------Scatt_AngleSlice")
         for i in initial_energy:
-            fracEn = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness)
+            fracEn, theta_slice = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
             if (fracEn != 0):
-                theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],element_z,thickness, radiation_length, weigth, density)
+                theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],1,thickness, radiation_length, weigth, density)
             else:
                 theta_scat = 100000
-            print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}".format(i,fracEn*100, theta_scat))
+            print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}------------------- {3:.1f}".format(i,fracEn*100, theta_scat ,theta_slice))
         print("------------------------------------------------------------------------")
     element_z += 1
+
     '''
     plt.xlabel("range_data($\mu$m)")
     plt.ylabel("Kinetic Energy (MeV)")
@@ -122,4 +123,5 @@ for element in elements: #Loop in all files of folder
     plt.title("Hydrogen")
     plt.legend()
     plt.show()
-    '''   
+    '''
+print("End of Program")

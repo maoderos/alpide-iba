@@ -22,7 +22,7 @@ def getRadiation_length(Xo, weigth, density):
 
 def getMultipleScatt(Ek_initial, loss_fraction,ion_mass,z,x, radiation_length, weigth, density):
     # We will use the mean energy as a first approximation
-    Ek_mean = (Ek_initial + Ek_initial*loss_fraction)/2
+    Ek_mean = (Ek_initial + Ek_initial*(1 - loss_fraction) )/2
     E_rest = ion_mass # cause mass is in MeV/c**2
     E_mean = Ek_mean + E_rest
     # The momentum using special relativity
