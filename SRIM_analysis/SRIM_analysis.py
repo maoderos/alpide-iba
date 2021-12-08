@@ -28,6 +28,11 @@ density = 2.313 # g/cm3
 radiation_length = [21.82, 24.01, 34.24] # Si,Al,O
 weigth =  [0.8776, 0.034, 0.0884] # Si, Al, O
 
+table_totalEloss = []
+table_elecEloss = []
+table_nucEloss = []
+table_multScattEloss = []
+
 def line_filter(line):
     line1 = line.replace(" keV", "E-03")
     line2 = line1.replace(" MeV", "")
@@ -66,13 +71,29 @@ def format_file(filename,element): # Format SRIM tables and return lists
             repeated_line = True
         
     if not repeated_line:
-        lines_data.append( line_special)
+        lines_data.append(line_special)
 
     #lines_data.append(line_format_15)
     data_array_unsort = np.loadtxt(lines_data)
     #sort numpy array by the first collumn
     data_array = data_array_unsort[np.argsort(data_array_unsort[:, 0])]
     return data_array
+
+
+def gen_latex_table(table,energies):
+    print(r"\begin{table}[]" + "\n" + r"\resizebox{10.0cm}{!}{" + "\n" + r"\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|c|c|c|c|}" + "\n\hline\n")
+    header = "Element"
+    for i in energies:
+        header += r" & ${0} \ MeV$".format(i)
+    print(header + r" \\" )
+    print(r"\hline")
+    for j in table:
+        j = j.replace("$1000.0^{\circ}$", "-")
+        j = j.replace("$-10.0$","-")
+        j = j.replace("$-10000.0$", "-")
+        print(j)
+    print("\hline\n \end{tabular} \n } \n \end{table}")
+
 
 print("---------------" + radical[:-4] + "-----------------------")
 print("Thickness =", thickness)
@@ -82,6 +103,8 @@ for element in elements: #Loop in all files of folder
     filename = "{0}_{1}".format(element, radical)
     data_arr = format_file(filename,element)
     dE_dx = np.add(data_arr[:,1],data_arr[:,2]) # Get sum of colluns 1 e 2 (of dE/dx)
+    dE_dx_elec = data_arr[:,1]
+    dE_dx_nuc = data_arr[:,2]
     range_data = data_arr[:,3] #Get range collumn
     long_strag = data_arr[:,4] #Get longitudinal straggling
     kinEn = data_arr[:,0] # Get kinetic energy(initial) 
@@ -100,19 +123,34 @@ for element in elements: #Loop in all files of folder
    # print('range_data interpolation: {0} MeV'.format(kinEn_interp))
 
     if(EnergyLossTable):
-        print("------------------------------------------------------------------------")
-        print("Fraction of energy loss due to the ALPIDE")
-
-        print("Initial Energy ------------------ FracEnLoss -------------------- Scatt_Angle1-------------------Scatt_AngleSlice")
+        line_total = element
+        line_elec = element
+        line_nuc = element
+        line_multScatt = element
         for i in initial_energy:
-            fracEn, theta_slice = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
-            if (fracEn != 0):
-                theta_scat = getMultipleScatt(i,fracEn,element_mass[element_z - 1],1,thickness, radiation_length, weigth, density)
-            else:
-                theta_scat = 100000
-            print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}------------------- {3:.1f}".format(i,fracEn*100, theta_scat ,theta_slice))
+            En_loss_total, theta_slice = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            En_loss_elec, theta = calculate_energyLossFraction(dE_dx_elec,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            
+            En_loss_nuc, theta = calculate_energyLossFraction(dE_dx_nuc,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            line_total += " & ${0:.1f}$".format(En_loss_total)
+            line_elec += " & ${0:.1f}$".format(En_loss_elec)
+            line_nuc += " & ${0:.1f}$".format(En_loss_nuc*1e3) # to keV
+            line_multScatt += " & ${0:.1f}".format(theta_slice)
+            line_multScatt += "^{\circ}$"
+            #print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}------------------- {3:.1f}".format(i,fracEn*100, theta_scat ,theta_slice))
+        
         print("------------------------------------------------------------------------")
+        line_total += r" \\"
+        line_elec += r" \\"
+        line_nuc += r" \\"
+        line_multScatt += r" \\"
+        table_totalEloss.append(line_total)
+        table_elecEloss.append(line_elec)
+        table_nucEloss.append(line_nuc)
+        table_multScattEloss.append(line_multScatt)
     element_z += 1
+
+
 
     '''
     plt.xlabel("range_data($\mu$m)")
@@ -124,4 +162,14 @@ for element in elements: #Loop in all files of folder
     plt.legend()
     plt.show()
     '''
+
+print("------------------Tables-------------------")
+print("------------------Total Energy-------------------") 
+gen_latex_table(table_totalEloss,initial_energy)
+print("------------------Electronic Energy-------------------")
+gen_latex_table(table_elecEloss,initial_energy)
+print("------------------Nuclear Energy( keV )----------------------")
+gen_latex_table(table_nucEloss,initial_energy)
+print("------------------Multiple Scattering----------------------")
+gen_latex_table(table_multScattEloss,initial_energy)
 print("End of Program")

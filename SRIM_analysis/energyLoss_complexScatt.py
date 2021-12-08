@@ -69,7 +69,7 @@ def calculate_energyLossFraction(de_dx,range_data,kinEn,energy,thickness,ion_mas
             init+=step
 
         theta = 14.1*z*np.sqrt(sum1)*(1 + (1/9)*np.log10(sum2))*57.2957 # to change to degrees
-        frac_finalEn = (E_final/energy)
-        return frac_finalEn, theta 
+        #frac_finalEn = (E_final/energy)
+        return E_final, theta 
     else:
-        return 0, 1000
+        return -10, 1000
