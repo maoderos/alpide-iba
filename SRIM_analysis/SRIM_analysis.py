@@ -90,6 +90,8 @@ def gen_latex_table(table,energies):
     for j in table:
         j = j.replace("$1000.0^{\circ}$", "-")
         j = j.replace("$-10.0$","-")
+        j = j.replace("$-100.0\%$","-")
+        j = j.replace("$-1.0E+07$","-")
         j = j.replace("$-10000.0$", "-")
         print(j)
     print("\hline\n \end{tabular} \n } \n \end{table}")
@@ -128,13 +130,13 @@ for element in elements: #Loop in all files of folder
         line_nuc = element
         line_multScatt = element
         for i in initial_energy:
-            En_loss_total, theta_slice = calculate_energyLossFraction(dE_dx,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
-            En_loss_elec, theta = calculate_energyLossFraction(dE_dx_elec,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            En_loss_total,En_loss_elec, En_loss_nuc,theta_slice = calculate_energyLossFraction(data_arr,dE_dx,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            #En_loss_elec, theta = calculate_energyLossFraction(dE_dx_elec,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
             
-            En_loss_nuc, theta = calculate_energyLossFraction(dE_dx_nuc,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
-            line_total += " & ${0:.1f}$".format(En_loss_total)
-            line_elec += " & ${0:.1f}$".format(En_loss_elec)
-            line_nuc += " & ${0:.1f}$".format(En_loss_nuc*1e3) # to keV
+            #En_loss_nuc, theta = calculate_energyLossFraction(dE_dx_nuc,range_data,kinEn,i,thickness,element_mass[element_z - 1],radiation_length,weigth, density)
+            line_total += " & ${0:.1f}\%$".format(En_loss_total*100)
+            line_elec += " & ${0:.1E}$".format(En_loss_elec*1e6)
+            line_nuc += " & ${0:.1E}$".format(En_loss_nuc*1e6) # to keV
             line_multScatt += " & ${0:.1f}".format(theta_slice)
             line_multScatt += "^{\circ}$"
             #print("{0} MeV --------------------- {1:.1f} ----------------{2:.1f}------------------- {3:.1f}".format(i,fracEn*100, theta_scat ,theta_slice))
