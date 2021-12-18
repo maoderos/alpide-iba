@@ -13,8 +13,9 @@ Studies on ALPIDE sensor performance at low energies regime and its potecial for
 * `scripts/plot_eff.sh`: Plot efficiency as function of interaction rate using the macro "IBAInteractionRate.C".
 * `o2-files/`: Files from o2 simulation that were modified. 
 * `SRIM_analys/`: SRIM simulation data and codes to analyze its data. In `SRIM_analysis.py` we have the estimation of energy straggling from a longitudinal straggling and the fraction of energy loss crossing the ALPIDE.
+* `TRIM_analysys`: Python codes for TRIM simulation and data analysis of target damage of the ALPIDE model for different ions and energies.
 
-## Simulation Instructions
+## O2 Simulation Instructions
 
 OBS: The folder "alpide-iba" must be in the directory you want to make the simulation.
 
@@ -30,3 +31,10 @@ For generating the plot of efficiency (nClusterFromPrimaries/nPrimaries), you ne
 * `./scripts/plot_eff.sh -i "10 20 30"`
 
 The command above will generate the efficiency by interaction rate plot.
+
+## TRIM Analysis
+
+For using the python codes generated for analysing the damage, it is necessary to have SRIM installed and also the pysrim library.
+* pysrim: `https://pypi.org/project/pysrim/`
+* SRIM: `http://srim.org/`
+* Tutorial for installing SRIM in linux platforms with wine: `https://www.researchgate.net/publication/324329665_Installing_SRIM_2013_on_linuxmint_mate` 
