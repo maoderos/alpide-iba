@@ -31,8 +31,6 @@ def calculate_energyLossFraction(data_metal,data_si,energy,thickness,ion_mass,ra
     #energy_pos, = np.where(kinEn == energy)
     # print(range_data[energy_pos[0]])
     #diff = range_data[energy_pos[0]] - thickness
-    
-    
     init=0.0
     step=1.0
     E = energy
@@ -43,7 +41,7 @@ def calculate_energyLossFraction(data_metal,data_si,energy,thickness,ion_mass,ra
     sum1 = 0
     sum2 = 0
     while(init < thickness):
-        if(E>0):
+        if(E > 0):
             if(init>=10.0): # until 10 um ih the metal stack.
                 kinEn = data_si[:,0]
                 dE_dx = np.add(data_si[:,1],data_si[:,2])
@@ -76,12 +74,11 @@ def calculate_energyLossFraction(data_metal,data_si,energy,thickness,ion_mass,ra
             E_nuc +=  E_loss_nuc 
             E -= E_loss
             init+=step
-
+            if(E<0):
+                return -energy, -10, -10, 1000
+            
         #frac_finalEn = (E_final/energy)
         else:
             return -energy, -10, -10, 1000
     theta = 14.1*z*np.sqrt(sum1)*(1 + (1/9)*np.log10(sum2))*57.2957 # to change to degrees
-    if (E_final > energy):
-        return -energy, -10, -10, 1000
-    else:	
-    	return E_final, E_elec ,E_nuc, theta 
+    return E_final, E_elec ,E_nuc, theta 

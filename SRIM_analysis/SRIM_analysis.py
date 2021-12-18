@@ -97,6 +97,7 @@ def gen_latex_table(table,energies):
         j = j.replace("$1000.0^{\circ}$", "-")
         j = j.replace("$-100.0\%$","-")
         j = j.replace("$-1.0E+07$","-")
+        j = j.replace("E","x10^{")
         j = j.replace("$-10000.0$", "-")
         print(j)
     print("\hline\n \end{tabular} \n } \n \end{table}")
@@ -134,10 +135,10 @@ for element in elements: #Loop in all files of folder
    # print('range_data interpolation: {0} MeV'.format(kinEn_interp))
 
     if(EnergyLossTable):
-        line_total = element
-        line_elec = element
-        line_nuc = element
-        line_multScatt = element
+        line_total = "& " + element
+        line_elec = "& " + element
+        line_nuc = "& " + element
+        line_multScatt = "& " + element
         for i in initial_energy:
             En_loss_total,En_loss_elec,En_loss_nuc,theta_slice = calculate_energyLossFraction(data_metal,data_si,i,thickness,element_mass[element_z - 1],radiation_length,weigth_metal, weigth_si,density_metal,density_si)
           
