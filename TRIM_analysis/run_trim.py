@@ -2,7 +2,7 @@ from srim import Ion, Layer, Target, TRIM
 import os
 import sys
 
-n_ions = 1e5
+n_ions = 2e4
 ion_name = str(sys.argv[1])
 energy_ion = float(sys.argv[2])*1e6
 
