@@ -42,7 +42,7 @@ For using the python codes generated for analysing the damage, it is necessary t
 If you are using the docker version of pysrim, you need to have docker installed and get the docker image:
 `docker pull costrouc/pysrim`
 
-`automatize_trim.sh` or `automatize_trim_docker.sh` are the files for running the TRIM simulations. Lets explore the example bellow:
+`automatize_trim.sh` or `automatize_trim_docker.sh` are the files for running the TRIM simulations. Lets explore the example below:
 
 `./automatize_trim -n 20 -i He -e "10.0 20.0 30.0"`
 
