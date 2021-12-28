@@ -34,8 +34,8 @@ si = Layer({'Si': {'stoich': 1.0,
 target = Target([metal,si])
 
 # Initialize a TRIM with n number of ions and Full Cascade (2)
-trim = TRIM(target, ion, number_ions=n_ions, calculation=2,plot_xmin=100000.0,plot_xmax=340000.0)
-
+#trim = TRIM(target, ion, number_ions=n_ions, calculation=2,plot_xmin=100000.0,plot_xmax=340000.0)
+trim = TRIM(target, ion, number_ions=n_ions, calculation=2)
 # Specify the directory of SRIM.exe
 srim_executable_directory = '/tmp/srim'
 
