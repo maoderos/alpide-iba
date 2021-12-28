@@ -50,3 +50,19 @@ The argumets:
 * `-i`: The íon
 * `-n`: The number of events
 * `-e`: The energies that you want to run
+
+### Using Docker and GNU parallel
+
+Running SRIM through the docker is the most convenient way because it makes a fake x11 session, allowing to run everything through the command line. You can improve significantly the time of simulation dividing all simulations in nodes using GNU parallel. Obviusly, you must have GNU parallel installed:
+
+`sudo apt install parallel`
+
+or 
+
+`sudo pacman -S parallel`
+
+For running, use the following command:
+
+`parallel --jobs 10 ./automatize_trim_docker.sh -i {1} -e {2} -n 100 ::: H He Li Be B C N O F Ne ::: 4.0 8.0 10.0 15.0 20.0 30.0 40.0 50.0 60.0 70.0 80.0 90.0 100.0`
+
+The `--jobs` is the number of nodes that you want to use.
