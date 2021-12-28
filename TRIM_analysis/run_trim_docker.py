@@ -47,7 +47,3 @@ TRIM.copy_output_files('/tmp/srim', '/tmp/output')
 
 
 print("SIMULATION OF {0} IONS OF {1} WITH {2} MeV IN ALPIDE DONE.".format(n_ions, ion_name, sys.argv[2]))
-
-
-
-

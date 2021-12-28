@@ -26,8 +26,8 @@ metal = Layer({
         }, density=2.28, width=100000.0) 
         
 si = Layer({'Si': {'stoich': 1.0,
-               'E_d': 15.0, 
-               'lattice': 2.0, 
+               'E_d': 33.0, 
+               'lattice': 7.0, 
                'surface': 4.7}}, density=2.3212,width=400000.0) # Layer of Silicon with 40um thick
 
 # Construct a target of a single layer of Nickel
