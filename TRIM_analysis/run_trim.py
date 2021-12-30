@@ -16,8 +16,8 @@ metal = Layer({
                'lattice': 3.0, 
                'surface': 3.36}, 
         'Si': {'stoich': 0.388,
-               'E_d': 15.0, 
-               'lattice': 2.0, 
+               'E_d': 33.0, 
+               'lattice': 7.0, 
                'surface': 4.7}, 
         'O' : {'stoich': 0.442,
                'E_d': 28.0, 
@@ -34,7 +34,7 @@ si = Layer({'Si': {'stoich': 1.0,
 target = Target([metal,si])
 
 # Initialize a TRIM with n number of ions and Full Cascade (2)
-trim = TRIM(target, ion, number_ions=n_ions, calculation=2,plot_xmin=100000.0,plot_xmax=340000.0)
+trim = TRIM(target, ion, number_ions=n_ions, calculation=2)
 
 # Specify the directory of SRIM.exe
 srim_executable_directory = '/home/marcosderos/.wine/drive_c/Program Files (x86)/SRIM'
