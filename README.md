@@ -12,14 +12,16 @@ Studies on ALPIDE sensor performance at low energies regime and its potecial for
 * `scripts/Generate_single_proton_events.sh`: Generate proton events for each interaction rate provided.
 * `scripts/plot_eff.sh`: Plot efficiency as function of interaction rate using the macro "IBAInteractionRate.C".
 * `o2-files/`: Files from o2 simulation that were modified. 
-* `SRIM_analys/`: SRIM simulation data and codes to analyze its data. In `SRIM_analysis.py` we have the estimation of energy straggling from a longitudinal straggling and the fraction of energy loss crossing the ALPIDE.
-* `TRIM_analysys`: Python codes for TRIM simulation and data analysis of target damage of the ALPIDE model for different ions and energies.
+* `SRIM_analysis/`: SRIM simulation data and codes to analyze its data. In `SRIM_analysis.py` we have the estimation of energy straggling from a longitudinal straggling and the fraction of energy loss crossing the ALPIDE.
+* `TRIM_analysis`: Python codes for TRIM simulation and data analysis of target damage of the ALPIDE model for different ions and energies.
 
 ## O2 Simulation Instructions
 
+###  (TODO) Update for 2 kinds of simulation - punctual beam and divergent beam
+
 OBS: The folder "alpide-iba" must be in the directory you want to make the simulation.
 
-To simulate and analyze its data with "IBAclusterStats.C":
+To simulate and analyse its data with "IBAclusterStats.C":
 * `./alpide-iba/scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
 
 Where `-n` is the number of events and `-i` are the interaction rates that you want to make the simulation. For each interaction rate, one folder with the corresponding number will be created. 
@@ -35,9 +37,9 @@ The command above will generate the efficiency by interaction rate plot.
 ## TRIM Analysis
 
 For using the python codes generated for analysing the damage, it is necessary to have SRIM installed and also the pysrim library.
-* pysrim: `https://pypi.org/project/pysrim/`
-* SRIM: `http://srim.org/`
-* Tutorial for installing SRIM in linux platforms with wine: `https://www.researchgate.net/publication/324329665_Installing_SRIM_2013_on_linuxmint_mate`
+* (pysrim)[https://pypi.org/project/pysrim/]
+* (SRIM)[http://srim.org/]
+* (Tutorial for installing SRIM in linux platforms with wine)[https://www.researchgate.net/publication/324329665_Installing_SRIM_2013_on_linuxmint_mate]
 
 If you are using the docker version of pysrim, you need to have docker installed and get the docker image:
 `docker pull costrouc/pysrim`
@@ -46,7 +48,7 @@ If you are using the docker version of pysrim, you need to have docker installed
 
 `./automatize_trim -n 20 -i He -e "10.0 20.0 30.0"`
 
-The argumets:
+The arguments:
 * `-i`: The íon
 * `-n`: The number of events
 * `-e`: The energies that you want to run
@@ -57,7 +59,7 @@ Running SRIM through the docker is the most convenient way because it makes a fa
 
 `sudo apt install parallel`
 
-or 
+or (Arch based systems)
 
 `sudo pacman -S parallel`
 
