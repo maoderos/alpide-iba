@@ -37,9 +37,9 @@ The command above will generate the efficiency by interaction rate plot.
 ## TRIM Analysis
 
 For using the python codes generated for analysing the damage, it is necessary to have SRIM installed and also the pysrim library.
-* (pysrim)[https://pypi.org/project/pysrim/]
-* (SRIM)[http://srim.org/]
-* (Tutorial for installing SRIM in linux platforms with wine)[https://www.researchgate.net/publication/324329665_Installing_SRIM_2013_on_linuxmint_mate]
+* [pysrim](https://pypi.org/project/pysrim/)
+* [SRIM](http://srim.org/)
+* [Tutorial for installing SRIM in linux platforms with wine](https://www.researchgate.net/publication/324329665_Installing_SRIM_2013_on_linuxmint_mate)
 
 If you are using the docker version of pysrim, you need to have docker installed and get the docker image:
 `docker pull costrouc/pysrim`
