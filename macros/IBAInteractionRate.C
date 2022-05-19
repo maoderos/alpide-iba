@@ -85,18 +85,21 @@ void IBAInteractionRate(int preciousSensorID = 24){
 
   int max_x =  d_intRate.size() - 1;
   double max_value = d_intRate[max_x];
-  //TF1 *efficiency_th = new TF1("Theoretical Efficiency","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/x/9.8805107e-06/2",0,max_value);
-
+  TF1 *efficiency_ComMask = new TF1("Com mascaramento temporal","(1 - (TMath::PoissonI(0,2*x*9.8805107e-06)))/(x*9.8805107e-06*2)",0,max_value + 10e3);
+  TF1 *efficiency_SemMask = new TF1("Sem mascaramento temporal","(1 - (TMath::PoissonI(0,x*9.8805107e-06)))/(x*9.8805107e-06)",0,max_value + 10e3);
+  efficiency_SemMask->SetLineColor(3);
+  
   TLegend *legend = new TLegend(0.8,0.8,0.8,0.8);
-  legend->AddEntry(gr1,"Simulation data","p");
-  //legend->AddEntry(efficiency_th,"Theoretical eff.","l");
+  legend->AddEntry(gr1,"Simulac#tilde{a}o","p");
+  legend->AddEntry(efficiency_ComMask,"Mascaramento temporal","l");
+  legend->AddEntry(efficiency_SemMask,"Sem mascaremento temporal","l");
   legend->Draw();
 
   TCanvas *c1 = new TCanvas();
   c1->cd();
   gr1->Draw("A*");
-  //efficiency_th->Draw("SAME");
+  efficiency_ComMask->Draw("SAME");
+  efficiency_SemMask->Draw("SAME");
   legend->Draw();
   c1->SaveAs("Efficiency.pdf");
-
 }

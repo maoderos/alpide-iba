@@ -15,4 +15,6 @@ do
   echo "${i}" >> $ir_file;
 done
 
-root.exe -b -q alpide-iba/macros/IBAInteractionRate.C;
+root.exe -b -q IBAInteractionRate.C;
+
+rm $ir_file;

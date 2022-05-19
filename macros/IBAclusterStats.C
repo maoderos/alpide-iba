@@ -49,8 +49,8 @@ double GetnSim(std::string filename){
 }
 
 void IBAclusterStats(int preciousSensorID = 21) {
-  std::cout << "funciona" << std::endl;
-  int nSim = GetnSim("nSim.txt");
+  //std::cout << "funciona" << std::endl;
+  //int nSim = GetnSim("nSim.txt");
   int clusterFromPrimaries = 0;
   int numberEvents = 0;
   int nPrimaries = 0;
@@ -66,10 +66,10 @@ void IBAclusterStats(int preciousSensorID = 21) {
 
   std::map<double,std::vector<double>> energy_edep;
 
-  for(int i=1; i<=nSim; i++){
+  for(int i=1; i<=1; i++){
 
-    std::string clsFile = std::to_string(i) + "/mftclusters.root";
-    std::string o2sim_KineFile = std::to_string(i) + "/o2sim_Kine.root";
+    std::string clsFile = "../mftclusters.root";
+    std::string o2sim_KineFile = "../o2sim_Kine.root";
 
     // Files & Trees
     // MC
