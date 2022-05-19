@@ -17,22 +17,31 @@ Studies on ALPIDE sensor performance at low energies regime and its potecial for
 
 ## O2 Simulation Instructions
 
-###  (TODO) Update for 2 kinds of simulation - punctual beam and divergent beam
+The project folder must be in the directory that you want to make the simulation.
 
-OBS: The folder "alpide-iba" must be in the directory you want to make the simulation.
+Two types of simulations are available:
 
-To simulate and analyse its data with "IBAclusterStats.C":
-* `./alpide-iba/scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
+1. Punctual beam
+    The punctual beam is the simplest example. In order to run, we use the script `Generate_single_proton_events.sh` using the following example:
+    * `./alpide-iba/scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
 
-Where `-n` is the number of events and `-i` are the interaction rates that you want to make the simulation. For each interaction rate, one folder with the corresponding number will be created. 
+    Where `-n` is the number of events and `-i` are the interaction rates that you want to make the simulation. For each interaction rate, one folder with the corresponding number will be created. 
 
-OBS:In order to decrease the time of simulation, the command above has the following strategy: If the number of events is less than 2000 or odd, the script will make just 1 simulation with the number provided. Otherwise, if the number of events is bigger than 2000 and even, (n/2000) simulations will be made. 
+    The simulation results will be inside a folder "1", which is the number of protons per event used in the simulation. Since we are using a punctual beam, it is 1 proton per event. It will also generate a plot of the efficiency vs protons/s in "Efficiency.pdf"
+  
 
-For generating the plot of efficiency (nClusterFromPrimaries/nPrimaries), you need to specify which interaction rates do you want to use to make the plot:
+2. Divergent beam 
 
-* `./scripts/plot_eff.sh -i "10 20 30"`
+    The divergent beam illuminates an area of 0.5cm2 of the alpide chip. We use the following command:
+    * `./alpide-iba/scripts/Generate_multiple_proton_events.sh -n 10 -i "10 20 30" -p 200`
+    
+    Where `-n` is the number of events,`-i` are the interaction rates that you want to make the simulation and `p_evt` is the number of protons per event. For each interaction rate, one folder with the corresponding number will be created. 
 
-The command above will generate the efficiency by interaction rate plot.
+    The simulation results will be inside a folder "p_evt", which is the number of protons per event used in the simulation. 
+
+    For analyzing the data and generate a plot, one should use the macro `macros/IBAInteractionFluence.C` with the command:
+
+    *`root.exe -b -q IBAInteractionFluence.C`
 
 ## TRIM Analysis
 
