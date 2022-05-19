@@ -22,6 +22,7 @@ The project folder must be in the directory that you want to make the simulation
 Two types of simulations are available:
 
 1. Punctual beam
+
     The punctual beam is the simplest example. In order to run, we use the script `Generate_single_proton_events.sh` using the following example:
     * `./alpide-iba/scripts/Generate_single_proton_events.sh -n 10 -i "10 20 30"`
 
